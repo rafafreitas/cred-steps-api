@@ -25,7 +25,7 @@ class Database
         $db_driver = "mysql";
         $param = array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'set lc_time_names="pt_BR";',
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'set time_zone = "America/Recife"'
+            //PDO::MYSQL_ATTR_INIT_COMMAND => 'set time_zone = "America/Recife"'
         );
         # Informações sobre o sistema:
         $sistema_titulo = "API - Cred-Steps";
