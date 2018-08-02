@@ -20,7 +20,24 @@ class BancosDAO
         try {
             $stmt->execute();
             $count = $stmt->rowCount();
-            $resultBancos = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $resultBancos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            /*
+             * 1    - Banco do Brasil
+             * 31   - Caixa
+             * 114  - Itaú
+             * 159  - Santander
+             * 76   - Bracesco
+             */
+
+            foreach ($resultBancos as $key => $value){
+                if ($value['banco_id'] == 1 || $value['banco_id'] == 31 || $value['banco_id'] == 114 ||
+                    $value['banco_id'] == 159 || $value['banco_id'] == 76){
+                    unset($resultBancos[$key]);
+                    array_unshift($resultBancos, $value);
+                    // array_splice($resultBancos, $key, 0);
+                }
+            }
 
             if ($count != 0) {
                 return array(
