@@ -20,14 +20,14 @@ class UserDAO
 
         try {
             $stmt->execute();
-            $countLogin = $stmt->rowCount();
+            $count = $stmt->rowCount();
             $resultUsuario = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            if ($countLogin != 0) {
+            if ($count != 0) {
                 return array(
                     'status'    => 200,
                     'message'   => "INFO",
-                    'qtd'       => $countLogin,
+                    'qtd'       => $count,
                     'result'    => $resultUsuario
                 );
             }else{
