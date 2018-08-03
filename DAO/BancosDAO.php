@@ -30,13 +30,20 @@ class BancosDAO
              * 76   - Bracesco
              */
 
+            $array = array();
             foreach ($resultBancos as $key => $value){
                 if ($value['banco_id'] == 1 || $value['banco_id'] == 31 || $value['banco_id'] == 114 ||
                     $value['banco_id'] == 159 || $value['banco_id'] == 76){
+                    array_unshift($array, $value);
                     unset($resultBancos[$key]);
-                    array_unshift($resultBancos, $value);
-                    // array_splice($resultBancos, $key, 0);
                 }
+            }
+
+            $obj = array('divider' => true);
+            array_unshift($resultBancos, $obj);
+
+            foreach ($array as $key => $value){
+                array_unshift($resultBancos, $value);
             }
 
             if ($count != 0) {
