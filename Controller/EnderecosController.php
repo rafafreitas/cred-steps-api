@@ -6,7 +6,7 @@
  * Time: 22:56
  */
 
-require_once 'DAO/UserDAO.php';
+require_once 'DAO/ClienteDAO.php';
 class EnderecosController
 {
     public function getCidades($uf){
