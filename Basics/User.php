@@ -12,7 +12,10 @@ class User
     private $nome;
     private $cpf;
     private $telefone;
-    private $data;
+    private $nascimento;
+    private $email;
+    private $valorEmprestimo;
+    private $parcelas;
     private $status;
     private $cadastro;
     private $tipo_id;
@@ -84,17 +87,65 @@ class User
     /**
      * @return mixed
      */
-    public function getData()
+    public function getNascimento()
     {
-        return $this->data;
+        return $this->nascimento;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $nascimento
      */
-    public function setData($data)
+    public function setNascimento($nascimento)
     {
-        $this->data = $data;
+        $this->nascimento = $nascimento;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorEmprestimo()
+    {
+        return $this->valorEmprestimo;
+    }
+
+    /**
+     * @param mixed $valorEmprestimo
+     */
+    public function setValorEmprestimo($valorEmprestimo)
+    {
+        $this->valorEmprestimo = $valorEmprestimo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParcelas()
+    {
+        return $this->parcelas;
+    }
+
+    /**
+     * @param mixed $parcelas
+     */
+    public function setParcelas($parcelas)
+    {
+        $this->parcelas = $parcelas;
     }
 
     /**
@@ -144,5 +195,7 @@ class User
     {
         $this->tipo_id = $tipo_id;
     }
+
+
 
 }
