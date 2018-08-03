@@ -48,23 +48,6 @@ CREATE TABLE `enderecos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuarios`
---
-
-  CREATE TABLE `usuarios` (
-    `user_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `user_nome` LONGTEXT NOT NULL,
-    `user_cpf` VARCHAR(11) NOT NULL,
-    `user_telefone` VARCHAR(11) NOT NULL,
-    `user_data` DATE NOT NULL,
-    `user_status` TINYINT(1) NOT NULL,
-    `user_cadastro` DATETIME NOT NULL,
-    `tipo_id` INT(1) NOT NULL
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `ocupacao`
 --
 
@@ -130,26 +113,46 @@ CREATE TABLE `enderecos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario_ocupacao`
+-- Estrutura para tabela `clientes`
 --
 
-  CREATE TABLE `usuario_ocupacao` (
-    `user_ocup_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `user_id` INT(1) NOT NULL,
-    `ocup_id` INT(1) NOT NULL,
-    `user_estado` DATE DEFAULT NULL,
-    `user_cidade` DATE DEFAULT NULL,
-    `user_empresa` DATE DEFAULT NULL
+  CREATE TABLE `clientes` (
+    `cli_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_nome` LONGTEXT NOT NULL,
+    `cli_cpf` VARCHAR(11) NOT NULL,
+    `cli_telefone` VARCHAR(11) NOT NULL,
+    `cli_nascimento` DATE NOT NULL,
+    `cli_email` LONGTEXT DEFAULT NULL,
+    `cli_emprestimo` DOUBLE NOT NULL,
+    `cli_parcelas` INT(11) NOT NULL,
+    `cli_status` TINYINT(1) NOT NULL,
+    `cli_cadastro` DATETIME NOT NULL,
+    `tipo_id` INT(1) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario_motivo`
+-- Estrutura para tabela `cliente_ocupacao`
 --
-  CREATE TABLE `usuario_motivo` (
-    `user_motivo_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `user_id` INT(1) NOT NULL,
+
+  CREATE TABLE `cliente_ocupacao` (
+    `cli_ocup_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(1) NOT NULL,
+    `ocup_id` INT(1) NOT NULL,
+    `cli_estado` DATE DEFAULT NULL,
+    `cli_cidade` DATE DEFAULT NULL,
+    `cli_empresa` DATE DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_motivo`
+--
+  CREATE TABLE `cliente_motivo` (
+    `cli_motivo_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(1) NOT NULL,
     `motivo_id` INT(1) NOT NULL,
     `motivo_tratamento` LONGTEXT DEFAULT NULL,
     `data_festa` DATE DEFAULT NULL,
@@ -159,12 +162,12 @@ CREATE TABLE `enderecos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario_credito`
+-- Estrutura para tabela `cliente_credito`
 --
 
-  CREATE TABLE `usuario_motivo` (
-    `user_credito_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `user_id` INT(1) NOT NULL,
+  CREATE TABLE `cliente_credito` (
+    `cli_credito_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(1) NOT NULL,
     `cred_id` INT(1) NOT NULL,
     `limite_cartao` DOUBLE DEFAULT NULL,
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
