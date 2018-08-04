@@ -155,8 +155,7 @@ CREATE TABLE `enderecos` (
     `cli_id` INT(1) NOT NULL,
     `motivo_id` INT(1) NOT NULL,
     `motivo_tratamento` LONGTEXT DEFAULT NULL,
-    `data_festa` DATE DEFAULT NULL,
-    `limite_cartao` DOUBLE DEFAULT NULL,
+    `data_festa` DATE DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -169,5 +168,5 @@ CREATE TABLE `enderecos` (
     `cli_credito_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `cli_id` INT(1) NOT NULL,
     `cred_id` INT(1) NOT NULL,
-    `limite_cartao` DOUBLE DEFAULT NULL,
+    `limite_cartao` DOUBLE DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
