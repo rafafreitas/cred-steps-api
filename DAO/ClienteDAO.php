@@ -100,7 +100,7 @@ class ClienteDAO
 
         $sql = "INSERT INTO clientes (cli_nome, cli_cpf, cli_telefone, cli_nascimento, cli_email, 
                                       cli_emprestimo, cli_parcelas, cli_status, cli_cadastro, tipo_id)
-                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         $sql2 = "INSERT INTO cliente_ocupacao (cli_id, ocup_id, cli_estado, cli_cidade, cli_empresa)
@@ -108,6 +108,7 @@ class ClienteDAO
         $stmt2 = $conn->prepare($sql2);
 
         try {
+            $data = date('Y-m-d H:i:s');
 
             $stmt->bindValue(1,$cliente->getNome());
             $stmt->bindValue(2,$cliente->getCpf());
@@ -117,7 +118,8 @@ class ClienteDAO
             $stmt->bindValue(6,$cliente->getValorEmprestimo());
             $stmt->bindValue(7,$cliente->getParcelas());
             $stmt->bindValue(8,$cliente->getStatus());
-            $stmt->bindValue(9,$cliente->getTipoId());
+            $stmt->bindValue(9,$data);
+            $stmt->bindValue(10,$cliente->getTipoId());
             $stmt->execute();
 
             $last_id = $conn->lastInsertId();

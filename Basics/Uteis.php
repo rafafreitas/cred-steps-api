@@ -18,6 +18,11 @@ class Uteis
 
     }
 
+    public function getData(){
+        date_default_timezone_set("America/Recife");
+        return date('Y-m-d H:i:s');
+    }
+
     public function removeMask($oldValue, $type){
         switch ($type){
             case 'cpf':
@@ -35,4 +40,6 @@ class Uteis
                 break;
         }
     }
+
+
 }
