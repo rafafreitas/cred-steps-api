@@ -38,6 +38,13 @@ class Uteis
                 $telefone = str_replace("-", "", $telefone);
                 return $telefone;
                 break;
+
+            case 'money':
+                $money = str_replace("R$ ", "", $oldValue);
+                $money = str_replace(".", "", $money);
+                $money = str_replace(",", ".", $money);
+                return $money;
+                break;
         }
     }
 

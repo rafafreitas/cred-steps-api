@@ -9,7 +9,7 @@
 class Credito
 {
     private $id;
-    private $cli_di;
+    private $cli_id;
     private $cred_id;
     private $limite_cartao;
 
@@ -32,17 +32,17 @@ class Credito
     /**
      * @return mixed
      */
-    public function getCliDi()
+    public function getCliId()
     {
-        return $this->cli_di;
+        return $this->cli_id;
     }
 
     /**
-     * @param mixed $cli_di
+     * @param mixed $cli_id
      */
-    public function setCliDi($cli_di)
+    public function setCliId($cli_id)
     {
-        $this->cli_di = $cli_di;
+        $this->cli_id = $cli_id;
     }
 
     /**
