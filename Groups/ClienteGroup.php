@@ -44,6 +44,7 @@ $app->group('', function (){
         $cliente->setEmail($json["email"]);
         $cliente->setNascimento($json["nascimento"]);
         $cliente->setStatus(1);
+        $cliente->setTipoId(1);
 
         $ocupacao = new Ocupacao();
         $ocupacao->setOpcao($json["ocupacao"]);

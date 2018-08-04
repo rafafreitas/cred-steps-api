@@ -8,7 +8,7 @@
 
 require 'Header/index.php';
 
-require 'Groups/UsuarioGroup.php';
+require 'Groups/ClienteGroup.php';
 require 'Groups/BancosGroup.php';
 require 'Groups/EnderecosGroup.php';
 

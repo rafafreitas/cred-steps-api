@@ -9,7 +9,7 @@
 require_once "Basics/Cliente.php";
 require_once 'Basics/Ocupacao.php';
 require_once 'Connection/Conexao.php';
-class ClientesDAO
+class ClienteDAO
 {
     public function verifyCliente($cpf){
 
@@ -98,10 +98,14 @@ class ClientesDAO
     public function insert(Cliente $cliente, Ocupacao $ocupacao){
         $conn = \Database::conexao();
 
-        $sql = "INSERT INTO clientes (cli_nome, cli_cpf, cli_telefone, cli_nascimento, cli_email
+        $sql = "INSERT INTO clientes (cli_nome, cli_cpf, cli_telefone, cli_nascimento, cli_email, 
                                       cli_emprestimo, cli_parcelas, cli_status, cli_cadastro, tipo_id)
                     VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
         $stmt = $conn->prepare($sql);
+
+        $sql2 = "INSERT INTO cliente_ocupacao (cli_id, ocup_id, cli_estado, cli_cidade, cli_empresa)
+                    VALUES (?, ?, ?, ?, ?)";
+        $stmt2 = $conn->prepare($sql2);
 
         try {
 
@@ -117,6 +121,13 @@ class ClientesDAO
             $stmt->execute();
 
             $last_id = $conn->lastInsertId();
+
+            $stmt2->bindValue(1,$last_id);
+            $stmt2->bindValue(2,$ocupacao->getOpcao());
+            $stmt2->bindValue(3,$ocupacao->getEstado());
+            $stmt2->bindValue(4,$ocupacao->getCidade());
+            $stmt2->bindValue(5,$ocupacao->getEmpresa());
+            $stmt2->execute();
 
             return array(
                 'status'    => 200,
@@ -150,6 +161,14 @@ class ClientesDAO
                 WHERE cli_id = ?";
         $stmt = $conn->prepare($sql);
 
+        $sql2 = "UPDATE cliente_ocupacao
+                SET  ocup_id  = ?,
+                     cli_estado = ?,
+                     cli_cidade = ?,
+                     cli_empresa = ?
+                WHERE cli_id = ?";
+        $stmt2 = $conn->prepare($sql2);
+
         try {
 
             $stmt->bindValue(1,$cliente->getNome());
@@ -159,8 +178,15 @@ class ClientesDAO
             $stmt->bindValue(5,$cliente->getEmail());
             $stmt->bindValue(6,$cliente->getValorEmprestimo());
             $stmt->bindValue(7,$cliente->getParcelas());
+            $stmt->bindValue(8,$cliente->getId());
             $stmt->execute();
 
+            $stmt2->bindValue(1,$ocupacao->getOpcao());
+            $stmt2->bindValue(2,$ocupacao->getEstado());
+            $stmt2->bindValue(3,$ocupacao->getCidade());
+            $stmt2->bindValue(4,$ocupacao->getEmpresa());
+            $stmt2->bindValue(5,$ocupacao->getCliId());
+            $stmt2->execute();
 
             return array(
                 'status'    => 200,

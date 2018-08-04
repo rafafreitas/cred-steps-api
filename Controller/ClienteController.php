@@ -48,7 +48,15 @@ class ClienteController
             die;
         }
 
-        $clienteDAO = new UserDAO();
-        return $clienteDAO->insert($cliente, $ocupacao);
+        $clienteDAO = new ClienteDAO();
+        $retorno = $clienteDAO->verifyCliente($cliente->getCpf());
+
+        if($retorno['status'] == 200){
+            return $clienteDAO->insert($cliente, $ocupacao);
+        }else{
+            $cliente->setId($retorno['result'][0]->cli_id);
+            $ocupacao->setCliId($retorno['result'][0]->cli_id);
+            return $clienteDAO->update($cliente, $ocupacao);
+        }
     }
 }

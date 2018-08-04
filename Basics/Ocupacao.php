@@ -13,7 +13,7 @@ class Ocupacao
     private $estado;
     private $cidade;
     private $empresa;
-    private $user_id;
+    private $cli_id;
 
     /**
      * @return mixed
@@ -98,16 +98,17 @@ class Ocupacao
     /**
      * @return mixed
      */
-    public function getUserId()
+    public function getCliId()
     {
-        return $this->user_id;
+        return $this->cli_id;
     }
 
     /**
-     * @param mixed $user_id
+     * @param mixed $cli_id
      */
-    public function setUserId($user_id)
+    public function setCliId($cli_id)
     {
-        $this->user_id = $user_id;
+        $this->cli_id = $cli_id;
     }
+
 }
