@@ -53,10 +53,12 @@ class ClienteController
 
         if($retorno['status'] == 200){
             return $clienteDAO->insert($cliente, $ocupacao);
-        }else{
+        }else if ($retorno['status'] == 401){
             $cliente->setId($retorno['result'][0]->cli_id);
             $ocupacao->setCliId($retorno['result'][0]->cli_id);
             return $clienteDAO->update($cliente, $ocupacao);
+        }else{
+            return $retorno;
         }
     }
 }
