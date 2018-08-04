@@ -37,6 +37,7 @@ $app->group('', function (){
         $json = $request->getParsedBody();
 
         $uteisClass = new Uteis();
+        $authorization = new Authorization();
 
         $nascimento = $uteisClass->convertData($json["nascimento"], '/');
         $telefone = $uteisClass->removeMask($json["telefone"], 'telefone');
@@ -61,6 +62,11 @@ $app->group('', function (){
 
         $clienteController = new ClienteController();
         $retorno = $clienteController->insert($cliente, $ocupacao);
+
+        if ($retorno['status'] == 200){
+            $retorno['token'] = $authorization->gerarToken($retorno['user_id']);
+            unset($retorno['user_id']);
+        }
 
         return $response->withJson($retorno, $retorno['status']);
 

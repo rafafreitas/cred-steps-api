@@ -193,7 +193,8 @@ class ClienteDAO
             return array(
                 'status'    => 200,
                 'message'   => "SUCCESS",
-                'result'    => "Cliente atualizado!"
+                'result'    => "Cliente atualizado!",
+                'user_id'   => $cliente->getId()
             );
 
         } catch (PDOException $ex) {
