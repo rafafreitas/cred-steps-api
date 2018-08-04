@@ -8,13 +8,14 @@
 
 require_once 'Basics/Cliente.php';
 require_once 'Basics/Ocupacao.php';
+require_once 'Basics/Uteis.php';
 require_once 'Controller/Authorization.php';
 require_once 'Controller/ClienteController.php';
 
 $app->group('', function (){
 
     //List-All
-    $this->get('/users', function ($request, $response, $args) {
+    $this->get('/clientes', function ($request, $response, $args) {
 
         $auth = new Authorization();
         $check = $auth->verificarToken($request);
@@ -31,26 +32,32 @@ $app->group('', function (){
 
     });
 
-    $this->post('/users', function ($request, $response, $args) {
+    $this->post('/cliente', function ($request, $response, $args) {
 
         $json = $request->getParsedBody();
+
+        $uteisClass = new Uteis();
+
+        $nascimento = $uteisClass->convertData($json["nascimento"], '/');
+        $telefone = $uteisClass->removeMask($json["telefone"], 'telefone');
+        $cpf = $uteisClass->removeMask($json["cpf"], 'cpf');
 
         $cliente = new Cliente();
         $cliente->setValorEmprestimo($json["money"]);
         $cliente->setParcelas($json["parcela"]);
         $cliente->setNome($json["nome"]);
-        $cliente->setTelefone($json["telefone"]);
-        $cliente->setCpf($json["cpf"]);
+        $cliente->setTelefone($telefone);
+        $cliente->setCpf($cpf);
         $cliente->setEmail($json["email"]);
-        $cliente->setNascimento($json["nascimento"]);
+        $cliente->setNascimento($nascimento);
         $cliente->setStatus(1);
         $cliente->setTipoId(1);
 
         $ocupacao = new Ocupacao();
-        $ocupacao->setOpcao($json["ocupacao"]);
-        $ocupacao->setEstado($json["estado"]);
-        $ocupacao->setCidade($json["cidade"]);
-        $ocupacao->setEmpresa($json["empresa"]);
+        $ocupacao->setOpcao($json["ocupacao"]["opcao"]);
+        $ocupacao->setEstado($json["ocupacao"]["estado"]);
+        $ocupacao->setCidade($json["ocupacao"]["cidade"]);
+        $ocupacao->setEmpresa($json["ocupacao"]["empresa"]);
 
         $clienteController = new ClienteController();
         $retorno = $clienteController->insert($cliente, $ocupacao);
