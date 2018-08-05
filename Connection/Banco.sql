@@ -138,11 +138,11 @@ CREATE TABLE `enderecos` (
 
   CREATE TABLE `cliente_ocupacao` (
     `cli_ocup_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `cli_id` INT(1) NOT NULL,
-    `ocup_id` INT(1) NOT NULL,
-    `cli_estado` DATE DEFAULT NULL,
-    `cli_cidade` DATE DEFAULT NULL,
-    `cli_empresa` DATE DEFAULT NULL
+    `cli_id` INT(11) NOT NULL,
+    `ocup_id` INT(11) NOT NULL,
+    `cli_estado` LONGTEXT DEFAULT NULL,
+    `cli_cidade` INT(11) DEFAULT NULL,
+    `cli_empresa` LONGTEXT DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -152,8 +152,8 @@ CREATE TABLE `enderecos` (
 --
   CREATE TABLE `cliente_motivo` (
     `cli_motivo_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `cli_id` INT(1) NOT NULL,
-    `motivo_id` INT(1) NOT NULL,
+    `cli_id` INT(11) NOT NULL,
+    `motivo_id` INT(11) NOT NULL,
     `motivo_tratamento` LONGTEXT DEFAULT NULL,
     `data_festa` DATE DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -166,7 +166,67 @@ CREATE TABLE `enderecos` (
 
   CREATE TABLE `cliente_credito` (
     `cli_credito_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `cli_id` INT(1) NOT NULL,
-    `cred_id` INT(1) NOT NULL,
+    `cli_id` INT(11) NOT NULL,
+    `cred_id` INT(11) NOT NULL,
     `limite_cartao` DOUBLE DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_financeiro`
+--
+
+  CREATE TABLE `cliente_financeiro` (
+    `cli_financeiro_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(11) NOT NULL,
+    `spc` TINYINT(1) NOT NULL,
+    `cheque` TINYINT(1) NOT NULL,
+    `chequeDev` TINYINT(1) NOT NULL,
+    `emprego` INT(1) NOT NULL,
+    `rendaComprovada` INT(1) NOT NULL,
+    `bank_possui` INT(1) NOT NULL,
+    `bank_id` INT(11) DEFAULT NULL,
+    `bank_tempo_conta` INT(1) DEFAULT NULL,
+    `bank_agencia` LONGTEXT DEFAULT NULL,
+    `bank_conta` LONGTEXT DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_parentesco`
+--
+
+  CREATE TABLE `cliente_parentesco` (
+    `cli_financeiro_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(11) NOT NULL,
+    `grau` INT(1) NOT NULL,
+    `proximidade` LONGTEXT NOT NULL,
+    `nome` LONGTEXT NOT NULL,
+    `cpf` VARCHAR(11) NOT NULL,
+    `telefone` VARCHAR(1) NOT NULL,
+    `nascimento` DATE NOT NULL,
+    `ocupacao` INT(11) DEFAULT NULL,
+    `estado` LONGTEXT DEFAULT NULL,
+    `cidade` INT(11) DEFAULT NULL,
+    `empresa` LONGTEXT DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_estadual_municipal`
+--
+
+  CREATE TABLE `cliente_estadual_municipal` (
+    `cli_financeiro_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(11) NOT NULL,
+    `margemOption` INT(1) NOT NULL,
+    `margem` LONGTEXT NOT NULL,
+    `matricula` LONGTEXT NOT NULL,
+    `password` VARCHAR(11) NOT NULL,
+    `imageName` VARCHAR(1) NOT NULL,
+    `imageUrl` DATE NOT NULL,
+    `imageFile` INT(11) DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

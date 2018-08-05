@@ -152,6 +152,8 @@ class ClienteDAO
     public function update(Cliente $cliente, Ocupacao $ocupacao){
         $conn = \Database::conexao();
 
+        $data = date('Y-m-d H:i:s');
+
         $sql = "UPDATE clientes
                 SET  cli_nome  = ?,
                      cli_cpf = ?,
@@ -159,7 +161,8 @@ class ClienteDAO
                      cli_nascimento = ?,
                      cli_email = ?,
                      cli_emprestimo = ?,
-                     cli_parcelas = ?
+                     cli_parcelas = ?,
+                     cli_cadastro = ?
                 WHERE cli_id = ?";
         $stmt = $conn->prepare($sql);
 
@@ -180,7 +183,8 @@ class ClienteDAO
             $stmt->bindValue(5,$cliente->getEmail());
             $stmt->bindValue(6,$cliente->getValorEmprestimo());
             $stmt->bindValue(7,$cliente->getParcelas());
-            $stmt->bindValue(8,$cliente->getId());
+            $stmt->bindValue(8,$data);
+            $stmt->bindValue(9,$cliente->getId());
             $stmt->execute();
 
             $stmt2->bindValue(1,$ocupacao->getOpcao());
