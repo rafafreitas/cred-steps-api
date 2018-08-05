@@ -7,11 +7,15 @@
  */
 
 require_once 'Basics/Cliente.php';
-require_once 'Basics/Ocupacao.php';
-require_once 'Basics/Motivo.php';
 require_once 'Basics/Credito.php';
+require_once 'Basics/EstadualMunicipal.php';
+require_once 'Basics/Financeiro.php';
+require_once 'Basics/Motivo.php';
+require_once 'Basics/Ocupacao.php';
+require_once 'Basics/Parentesco.php';
 require_once 'Basics/Uteis.php';
 require_once 'Controller/Authorization.php';
+require_once 'Controller/AdicionaisController.php';
 require_once 'Controller/ClienteController.php';
 require_once 'Controller/MotivoController.php';
 
@@ -103,6 +107,70 @@ $app->group('', function (){
 
         $motivoController = new MotivoController();
         $retorno = $motivoController->insert($motivo, $credito);
+
+        if ($retorno['status'] == 200){
+            $retorno['token'] = $authorization->gerarToken($retorno['user_id']);
+            unset($retorno['user_id']);
+        }
+
+        return $response->withJson($retorno, $retorno['status']);
+
+    });
+
+    $this->post('/cliente/adicionais', function ($request, $response, $args) {
+
+        $json = $request->getParsedBody();
+        $authorization = new Authorization();
+        $uteisClass = new Uteis();
+
+        $check = $authorization->verificarToken($request);
+        if ($check['status'] != 200) {
+            return $response->withJson($check, $check['status']);
+            die;
+        }
+
+        $financeiro = new Financeiro();
+        $financeiro->setCliId($check["token"]->data);
+        $financeiro->setSpc($json['geral']['financeiras']["spc"]);
+        $financeiro->setCheque($json['geral']['financeiras']["cheque"]);
+        $financeiro->setChequeDev($json['geral']['financeiras']["chequeDev"]);
+        $financeiro->setEmprego($json['geral']['financeiras']["emprego"]);
+        $financeiro->setRendaComprovada($json['geral']['financeiras']["rendaComprovada"]);
+        $financeiro->setBankPossui($json['geral']['financeiras']["banck"]["possui"]);
+        $financeiro->setBankId($json['geral']['financeiras']["banck"]["banco"]);
+        $financeiro->setBankTempoConta($json['geral']['financeiras']["banck"]["tempoConta"]);
+        $financeiro->setBankAgencia($json['geral']['financeiras']["banck"]["agencia"]);
+        $financeiro->setBankConta($json['geral']['financeiras']["banck"]["conta"]);
+
+        foreach ($json['geral']['parentescos'] as $key => $value) {
+            $nascimento = $uteisClass->convertData($json['geral']['parentescos'][$key]['nascimento'], '/');
+            $telefone = $uteisClass->removeMask($json['geral']['parentescos'][$key]['telefone'], 'telefone');
+            $cpf = $uteisClass->removeMask($json['geral']['parentescos'][$key]['cpf'], 'cpf');
+            $json['geral']['parentescos'][$key]['cpf'] = $cpf;
+            $json['geral']['parentescos'][$key]['telefone'] = $telefone;
+            $json['geral']['parentescos'][$key]['nascimento'] = $nascimento;
+        }
+        $arrayParentesco = $json['geral']['parentescos'];
+
+        $estadualMunicipal = new EstadualMunicipal();
+        $flag = null;
+        if ($json['ocupacao'] == 5) $flag = 'estadual';
+        if ($json['ocupacao'] == 6) $flag = 'municipal';
+
+        if($json['ocupacao'] == 5 || $json['ocupacao'] == 6){
+            $margem = $uteisClass->removeMask($json[$flag]['margem'], 'money');
+
+            $estadualMunicipal->setMargemInfo($json[$flag]['margemRadio']);
+            $estadualMunicipal->setMargemValor($margem);
+            $estadualMunicipal->setMatricula($json[$flag]['matricula']);
+            $estadualMunicipal->setPassword($json[$flag]['password']);
+            $estadualMunicipal->setImageName($json[$flag]['file']['imageName']);
+            $estadualMunicipal->setImageUrl($json[$flag]['file']['imageUrl']);
+            $estadualMunicipal->setImageFile($json[$flag]['file']['imageFile']);
+        }
+
+        $adicionaisController = new AdicionaisController();
+        $retorno = $adicionaisController->insert($estadualMunicipal, $financeiro, $arrayParentesco, $flag);
 
         if ($retorno['status'] == 200){
             $retorno['token'] = $authorization->gerarToken($retorno['user_id']);
