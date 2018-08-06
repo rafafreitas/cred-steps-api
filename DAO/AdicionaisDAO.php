@@ -136,44 +136,91 @@ class AdicionaisDAO
     public function update(EstadualMunicipal $estadualMunicipal, Financeiro $financeiro, $parentesco, $flag){
         $conn = \Database::conexao();
 
-        $sql = "UPDATE cliente_motivo
-                SET  motivo_id = ?,
-                     motivo_tratamento = ?,
-                     data_festa = ?
+        $sql = "UPDATE cliente_financeiro
+                SET  spc = ?,
+                     cheque = ?,
+                     chequeDev = ?,
+                     emprego = ?,
+                     rendaComprovada = ?,
+                     bank_possui = ?,
+                     bank_id = ?,
+                     bank_tempo_conta = ?,
+                     bank_agencia = ?,
+                     bank_conta = ?
                 WHERE cli_id = ?";
         $stmt = $conn->prepare($sql);
 
-        $sql2 = "DELETE from cliente_credito WHERE cli_id = ?";
+        $sql2 = "DELETE from cliente_parentesco WHERE cli_id = ?";
         $stmt2 = $conn->prepare($sql2);
 
-        $sql3 = "INSERT INTO cliente_credito (cli_id, cred_id, limite_cartao)
-                    VALUES (?, ?, ?)";
+        $sql3 = "DELETE from cliente_estadual_municipal WHERE cli_id = ?";
         $stmt3 = $conn->prepare($sql3);
+
+        $sql4 = "INSERT INTO cliente_parentesco (cli_id, grau, proximidade, nome, 
+                             cpf, telefone, nascimento, ocupacao, estado, cidade, empresa)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt4 = $conn->prepare($sql4);
+
+        $sql5 = "INSERT INTO cliente_estadual_municipal (cli_id, margemOption, margem, 
+                             matricula, password, imageName, imageUrl, imageFile)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt5 = $conn->prepare($sql5);
 
         try {
 
-            $stmt->bindValue(1,$motivo->getMotivoId());
-            $stmt->bindValue(2,$motivo->getTratamento());
-            $stmt->bindValue(3,$motivo->getDataFesta());
-            $stmt->bindValue(4,$motivo->getCliId());
+            $stmt->bindValue(1,$financeiro->getSpc());
+            $stmt->bindValue(2,$financeiro->getCheque());
+            $stmt->bindValue(3,$financeiro->getChequeDev());
+            $stmt->bindValue(4,$financeiro->getEmprego());
+            $stmt->bindValue(5,$financeiro->getRendaComprovada());
+            $stmt->bindValue(6,$financeiro->getBankPossui());
+            $stmt->bindValue(7,$financeiro->getBankId());
+            $stmt->bindValue(8,$financeiro->getBankTempoConta());
+            $stmt->bindValue(9,$financeiro->getBankAgencia());
+            $stmt->bindValue(10,$financeiro->getBankConta());
+            $stmt->bindValue(11,$financeiro->getCliId());
             $stmt->execute();
 
-            $stmt2->bindValue(1,$credito->getCliId());
+            $stmt2->bindValue(1,$financeiro->getCliId());
             $stmt2->execute();
 
-            foreach ($credito->getCredId() as $key => $value){
-                $limite = ($value == 2) ? $credito->getLimiteCartao() : null ;
-                $stmt3->bindValue(1,$credito->getCliId());
-                $stmt3->bindValue(2,$value);
-                $stmt3->bindValue(3,$limite);
-                $stmt3->execute();
+            $stmt3->bindValue(1,$financeiro->getCliId());
+            $stmt3->execute();
+
+            foreach ($parentesco as $key => $value) {
+
+                $stmt4->bindValue(1,$financeiro->getCliId());
+                $stmt4->bindValue(2,$value['grau']);
+                $stmt4->bindValue(3,$value['proximidade']);
+                $stmt4->bindValue(4,$value['nome']);
+                $stmt4->bindValue(5,$value['cpf']);
+                $stmt4->bindValue(6,$value['telefone']);
+                $stmt4->bindValue(7,$value['nascimento']);
+                $stmt4->bindValue(8,$value['ocupacao']);
+                $stmt4->bindValue(9,$value['estado']);
+                $stmt4->bindValue(10,$value['cidade']);
+                $stmt4->bindValue(11,$value['empresa']);
+                $stmt4->execute();
+
+            }
+
+            if($flag){
+                $stmt5->bindValue(1,$financeiro->getCliId());
+                $stmt5->bindValue(2,$estadualMunicipal->getMargemInfo());
+                $stmt5->bindValue(3,$estadualMunicipal->getMargemValor());
+                $stmt5->bindValue(4,$estadualMunicipal->getMatricula());
+                $stmt5->bindValue(5,$estadualMunicipal->getPassword());
+                $stmt5->bindValue(6,$estadualMunicipal->getImageName());
+                $stmt5->bindValue(7,$estadualMunicipal->getImageUrl());
+                $stmt5->bindValue(8,$estadualMunicipal->getImageFile());
+                $stmt5->execute();
             }
 
             return array(
                 'status'    => 200,
                 'message'   => "SUCCESS",
-                'result'    => "Motivos e créditos atualizados!",
-                'user_id'   => $motivo->getCliId()
+                'result'    => "Dados adicionais atualizados!",
+                'user_id'   => $financeiro->getCliId()
             );
 
         } catch (PDOException $ex) {

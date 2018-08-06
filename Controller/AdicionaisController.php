@@ -40,7 +40,7 @@ class AdicionaisController
             die;
         }
 
-        if (empty($financeiro->getBankId() == "")) {
+        if ($financeiro->getBankId() == "") {
             $financeiro->setBankId(null);
         }
 
