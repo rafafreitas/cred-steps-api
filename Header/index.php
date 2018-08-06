@@ -6,6 +6,7 @@
  * Time: 19:13
  */
 
+define('UPLOAD_CLI', 'uploads/docs/');
 date_default_timezone_set('America/Recife');
 header("Content-Type: application/json");
 require 'lib/vendor/autoload.php';

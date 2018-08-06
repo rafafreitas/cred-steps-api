@@ -153,7 +153,6 @@ $app->group('', function (){
                 unset($arrayParentesco[$key]);
             }
         }
-
         foreach ($arrayParentesco as $key => $value) {
 
             if (!empty($arrayParentesco[$key]['nascimento'])){
@@ -180,14 +179,14 @@ $app->group('', function (){
 
         if($json['ocupacao'] == 5 || $json['ocupacao'] == 6){
             $margem = $uteisClass->removeMask($json[$flag]['margem'], 'money');
-
             $estadualMunicipal->setMargemInfo($json[$flag]['margemRadio']);
             $estadualMunicipal->setMargemValor($margem);
             $estadualMunicipal->setMatricula($json[$flag]['matricula']);
             $estadualMunicipal->setPassword($json[$flag]['password']);
             $estadualMunicipal->setImageName($json[$flag]['file']['imageName']);
-            $estadualMunicipal->setImageUrl($json[$flag]['file']['imageUrl']);
-            $estadualMunicipal->setImageFile($json[$flag]['file']['imageFile']);
+            $img = $uteisClass->base64_to_jpeg($json[$flag]['file']['imageUrl'], $json[$flag]['file']['imageName']);
+            $estadualMunicipal->setImageUrl($img);
+            $estadualMunicipal->setImageFile(null);
         }
 
         $adicionaisController = new AdicionaisController();
