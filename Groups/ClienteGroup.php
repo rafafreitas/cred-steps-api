@@ -143,15 +143,35 @@ $app->group('', function (){
         $financeiro->setBankAgencia($json['geral']['financeiras']["banck"]["agencia"]);
         $financeiro->setBankConta($json['geral']['financeiras']["banck"]["conta"]);
 
-        foreach ($json['geral']['parentescos'] as $key => $value) {
-            $nascimento = $uteisClass->convertData($json['geral']['parentescos'][$key]['nascimento'], '/');
-            $telefone = $uteisClass->removeMask($json['geral']['parentescos'][$key]['telefone'], 'telefone');
-            $cpf = $uteisClass->removeMask($json['geral']['parentescos'][$key]['cpf'], 'cpf');
-            $json['geral']['parentescos'][$key]['cpf'] = $cpf;
-            $json['geral']['parentescos'][$key]['telefone'] = $telefone;
-            $json['geral']['parentescos'][$key]['nascimento'] = $nascimento;
-        }
         $arrayParentesco = $json['geral']['parentescos'];
+        foreach ($arrayParentesco as $key => $value) {
+            if (empty(array_filter($arrayParentesco[$key]['ocupacao']))){
+                unset($arrayParentesco[$key]['ocupacao']);
+                $arrayParentesco[$key]['ocupacao'] = "";
+            }
+            if (empty(array_filter($arrayParentesco[$key]))){
+                unset($arrayParentesco[$key]);
+            }
+        }
+
+        foreach ($arrayParentesco as $key => $value) {
+
+            if (!empty($arrayParentesco[$key]['nascimento'])){
+                $nascimento = $uteisClass->convertData($arrayParentesco[$key]['nascimento'], '/');
+                $arrayParentesco[$key]['nascimento'] = $nascimento;
+            }
+
+            if (!empty($arrayParentesco[$key]['nascimento'])){
+                $telefone = $uteisClass->removeMask($arrayParentesco[$key]['telefone'], 'telefone');
+                $arrayParentesco[$key]['telefone'] = $telefone;
+            }
+
+            if (!empty($arrayParentesco[$key]['nascimento'])){
+                $cpf = $uteisClass->removeMask($arrayParentesco[$key]['cpf'], 'cpf');
+                $arrayParentesco[$key]['cpf'] = $cpf;
+            }
+
+        }
 
         $estadualMunicipal = new EstadualMunicipal();
         $flag = null;

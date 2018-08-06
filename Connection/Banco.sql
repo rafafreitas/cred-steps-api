@@ -183,7 +183,7 @@ CREATE TABLE `enderecos` (
     `cli_id` INT(11) NOT NULL,
     `spc` TINYINT(1) NOT NULL,
     `cheque` TINYINT(1) NOT NULL,
-    `chequeDev` TINYINT(1) NOT NULL,
+    `chequeDev` TINYINT(1) DEFAULT NULL,
     `emprego` INT(1) NOT NULL,
     `rendaComprovada` INT(1) NOT NULL,
     `bank_possui` INT(1) NOT NULL,
@@ -200,14 +200,14 @@ CREATE TABLE `enderecos` (
 --
 
   CREATE TABLE `cliente_parentesco` (
-    `cli_financeiro_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `cli_id` INT(11) NOT NULL,
-    `grau` INT(1) NOT NULL,
-    `proximidade` LONGTEXT NOT NULL,
-    `nome` LONGTEXT NOT NULL,
-    `cpf` VARCHAR(11) NOT NULL,
-    `telefone` VARCHAR(1) NOT NULL,
-    `nascimento` DATE NOT NULL,
+    `cli_parentesco_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(11) DEFAULT NULL,
+    `grau` INT(1) DEFAULT NULL,
+    `proximidade` LONGTEXT DEFAULT NULL,
+    `nome` LONGTEXT DEFAULT NULL,
+    `cpf` VARCHAR(11) DEFAULT NULL,
+    `telefone` VARCHAR(1) DEFAULT NULL,
+    `nascimento` DATE DEFAULT NULL,
     `ocupacao` INT(11) DEFAULT NULL,
     `estado` LONGTEXT DEFAULT NULL,
     `cidade` INT(11) DEFAULT NULL,
@@ -221,13 +221,13 @@ CREATE TABLE `enderecos` (
 --
 
   CREATE TABLE `cliente_estadual_municipal` (
-    `cli_financeiro_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_estadual_mun_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `cli_id` INT(11) NOT NULL,
     `margemOption` INT(1) NOT NULL,
-    `margem` LONGTEXT NOT NULL,
-    `matricula` LONGTEXT NOT NULL,
-    `password` VARCHAR(11) NOT NULL,
-    `imageName` VARCHAR(1) NOT NULL,
-    `imageUrl` DATE NOT NULL,
-    `imageFile` INT(11) DEFAULT NULL
+    `margem` LONGTEXT DEFAULT NULL,
+    `matricula` LONGTEXT DEFAULT NULL,
+    `password` LONGTEXT DEFAULT NULL,
+    `imageName` LONGTEXT DEFAULT NULL,
+    `imageUrl` LONGTEXT DEFAULT NULL,
+    `imageFile` LONGTEXT DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

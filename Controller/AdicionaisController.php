@@ -40,6 +40,10 @@ class AdicionaisController
             die;
         }
 
+        if (empty($financeiro->getBankId() == "")) {
+            $financeiro->setBankId(null);
+        }
+
         $adicionaisDAO = new AdicionaisDAO();
         $retorno = $adicionaisDAO->verifyAdicionais($financeiro->getCliId());
 
