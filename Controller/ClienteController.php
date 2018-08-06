@@ -30,6 +30,10 @@ class ClienteController
             return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe o nome!');
             die;
         }
+        if (empty($cliente->getIndicacao())) {
+            return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe a indicação!');
+            die;
+        }
         if (empty($cliente->getTelefone())) {
             return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe o telefone!');
             die;

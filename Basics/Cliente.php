@@ -10,6 +10,7 @@ class Cliente
 {
     private $id;
     private $nome;
+    private $indicacao;
     private $cpf;
     private $telefone;
     private $nascimento;
@@ -50,6 +51,22 @@ class Cliente
     public function setNome($nome)
     {
         $this->nome = $nome;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIndicacao()
+    {
+        return $this->indicacao;
+    }
+
+    /**
+     * @param mixed $indicacao
+     */
+    public function setIndicacao($indicacao)
+    {
+        $this->indicacao = $indicacao;
     }
 
     /**
@@ -195,7 +212,4 @@ class Cliente
     {
         $this->tipo_id = $tipo_id;
     }
-
-
-
 }

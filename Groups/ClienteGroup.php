@@ -54,6 +54,7 @@ $app->group('', function (){
         $cliente->setValorEmprestimo($json["money"]);
         $cliente->setParcelas($json["parcela"]);
         $cliente->setNome($json["nome"]);
+        $cliente->setIndicacao($json["indicacao"]);
         $cliente->setTelefone($telefone);
         $cliente->setCpf($cpf);
         $cliente->setEmail($json["email"]);

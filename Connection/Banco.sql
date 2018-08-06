@@ -119,6 +119,7 @@ CREATE TABLE `enderecos` (
   CREATE TABLE `clientes` (
     `cli_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `cli_nome` LONGTEXT NOT NULL,
+    `cli_indicacao` LONGTEXT NOT NULL,
     `cli_cpf` VARCHAR(11) NOT NULL,
     `cli_telefone` VARCHAR(11) NOT NULL,
     `cli_nascimento` DATE NOT NULL,
