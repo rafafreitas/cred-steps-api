@@ -88,6 +88,7 @@ class ClienteDAO
                        fi.rendaComprovada,
                        fi.bank_possui,
                        fi.bank_id,
+                       ban.banco,
                        fi.bank_tempo_conta,
                        fi.bank_agencia,
                        fi.bank_conta
@@ -110,6 +111,9 @@ class ClienteDAO
                        
                        LEFT JOIN motivos mot
                        ON mo.motivo_id = mot.motivo_id
+                       
+                       LEFT JOIN bancos ban
+                       ON fi.bank_id = ban.banco_id
                        
                        WHERE cli.cli_id = ?;";
         $stmt = $conn->prepare($sql);
