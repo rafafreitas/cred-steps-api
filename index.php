@@ -11,6 +11,7 @@ require 'Header/index.php';
 require 'Groups/ClienteGroup.php';
 require 'Groups/BancosGroup.php';
 require 'Groups/EnderecosGroup.php';
+require 'Groups/EmailGroup.php';
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
     $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
