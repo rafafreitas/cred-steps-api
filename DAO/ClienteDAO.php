@@ -185,10 +185,9 @@ class ClienteDAO
             $resultFinalize = $stmt4->fetchAll(PDO::FETCH_ASSOC);
             $resultParentesco = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
-
             $resultCliente['credito'] = $resultCredito;
-            $resultCliente['estadMuni'] = $resultEstMuni;
-            $resultCliente['finalize'] = $resultFinalize;
+            $resultCliente['estadMuni'] = $resultEstMuni[0];
+            $resultCliente['finalize'] = $resultFinalize[0];
             $resultCliente['parentesco'] = $resultParentesco;
 
             return array(
