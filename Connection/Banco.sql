@@ -231,3 +231,20 @@ CREATE TABLE `enderecos` (
     `imageUrl` LONGTEXT DEFAULT NULL,
     `imageFile` LONGTEXT DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_estadual_municipal`
+--
+
+  CREATE TABLE `cliente_finalize` (
+    `cli_finalize_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_id` INT(11) NOT NULL,
+    `rg` LONGTEXT DEFAULT NULL,
+    `cpf` LONGTEXT DEFAULT NULL,
+    `compResidencia` LONGTEXT DEFAULT NULL,
+    `contraCheque` LONGTEXT DEFAULT NULL,
+    `carteiraTrabalho` LONGTEXT DEFAULT NULL,
+    `impostoRenda` LONGTEXT DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
