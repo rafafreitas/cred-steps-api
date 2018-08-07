@@ -10,6 +10,7 @@ require_once 'Basics/Cliente.php';
 require_once 'Basics/Credito.php';
 require_once 'Basics/EstadualMunicipal.php';
 require_once 'Basics/Financeiro.php';
+require_once 'Basics/Finalize.php';
 require_once 'Basics/Motivo.php';
 require_once 'Basics/Ocupacao.php';
 require_once 'Basics/Parentesco.php';
@@ -17,6 +18,7 @@ require_once 'Basics/Uteis.php';
 require_once 'Controller/Authorization.php';
 require_once 'Controller/AdicionaisController.php';
 require_once 'Controller/ClienteController.php';
+require_once 'Controller/FinalizeController.php';
 require_once 'Controller/MotivoController.php';
 
 $app->group('', function (){
@@ -201,4 +203,35 @@ $app->group('', function (){
 
     });
 
+    $this->post('/cliente/finalize', function ($request, $response, $args) {
+        $json = $request->getParsedBody();
+        $authorization = new Authorization();
+        $finalize = new Finalize();
+        $uteisClass = new Uteis();
+
+        $check = $authorization->verificarToken($request);
+        if ($check['status'] != 200) {
+            return $response->withJson($check, $check['status']);
+            die;
+        }
+
+        $finalize->setCliId($check["token"]->data);
+        $finalize->setRg($uteisClass->base64_to_jpeg($json['rg']['imageUrl'], $json['rg']['imageName']));
+        $finalize->setCpf($uteisClass->base64_to_jpeg($json['cpf']['imageUrl'], $json['cpf']['imageName']));
+        $finalize->setCompResidencia($uteisClass->base64_to_jpeg($json['comprovante']['imageUrl'], $json['comprovante']['imageName']));
+        $finalize->setContraCheque($uteisClass->base64_to_jpeg($json['contraCheque']['imageUrl'], $json['contraCheque']['imageName']));
+        $finalize->setCarteiraTrabalho($uteisClass->base64_to_jpeg($json['ctps']['imageUrl'], $json['ctps']['imageName']));
+        $finalize->setImpostoRenda($uteisClass->base64_to_jpeg($json['imposto']['imageUrl'], $json['imposto']['imageName']));
+
+        $finalizeController = new FinalizeController();
+        $retorno = $finalizeController->insert($finalize);
+
+        if ($retorno['status'] == 200){
+            $retorno['token'] = $authorization->gerarToken($retorno['user_id']);
+            unset($retorno['user_id']);
+        }
+
+        return $response->withJson($retorno, $retorno['status']);
+
+    });
 });

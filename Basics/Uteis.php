@@ -49,17 +49,17 @@ class Uteis
     }
 
     function base64_to_jpeg($base64_string, $output_file) {
-
+        if(empty($base64_string)){
+            return null;
+        }
         $output_file = strtoupper(uniqid()) . $output_file;
-
         $image_parts = explode(";base64,", $base64_string);
         $image_type_aux = explode("image/", $image_parts[0]);
         $image_type = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
         $file = UPLOAD_CLI . $output_file;
-//        mkdir('uploads/docs',0755);
+        // mkdir('uploads/docs',0755);
         file_put_contents($file, $image_base64);
-
         return $output_file;
     }
 }
