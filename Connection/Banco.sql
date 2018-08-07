@@ -75,10 +75,10 @@ CREATE TABLE `enderecos` (
 
   CREATE TABLE `motivos` (
     `motivo_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `motivo_nome` LONGTEXT NOT NULL,
+    `motivo_nome` LONGTEXT NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-  INSERT INTO `motivos` (`ocup_nome`) VALUES
+  INSERT INTO `motivos` (`motivo_nome`) VALUES
   ('Tratamento médico'),
   ('Tratamento odontológico'),
   ('Construção/Reforma ou decoração'),
@@ -99,7 +99,7 @@ CREATE TABLE `enderecos` (
 
   CREATE TABLE `conseguir_credito` (
     `cred_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `cred_nome` LONGTEXT NOT NULL,
+    `cred_nome` LONGTEXT NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
  INSERT INTO `conseguir_credito` (`cred_nome`) VALUES
@@ -109,6 +109,21 @@ CREATE TABLE `enderecos` (
   ('Cheque'),
   ('Boleto'),
   ('Débito em conta');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cliente_status`
+--
+
+  CREATE TABLE `cliente_status` (
+    `cli_status` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `cli_status_nome` INT(11) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+   INSERT INTO `cliente_status` (`cli_status_nome`) VALUES
+  ('Pendente'),
+  ('E-Mail enviado');
 
 -- --------------------------------------------------------
 
