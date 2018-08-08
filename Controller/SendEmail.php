@@ -9,7 +9,7 @@
 require 'lib/vendor/autoload.php';
 require_once 'Basics/Uteis.php';
 require_once 'DAO/ClienteDAO.php';
-require_once 'DAO/ClienteDAO.php';
+require_once 'DAO/FinalizeDAO.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 class SendEmail
@@ -53,31 +53,79 @@ class SendEmail
             $motivacao = $cliente['motivo_nome'].'('.$cliente['motivo_tratamento'].')';
         }elseif ($cliente['motivo_id'] == 5){
             $motivacao = $cliente['motivo_nome'].'('.$cliente['dataFesta'].')';
+        }elseif(is_null($cliente['motivo_id'])|| empty($cliente['motivo_id'])){
+            $motivacao = "Não fornecido.";
         }else{
             $motivacao = $cliente['motivo_nome'];
         }
 
-        $spc = ($cliente['spc'] == 0) ? 'Não' : 'Sim';
+        if(is_null($cliente['spc'])){
+            $spc = "Não fornecido.";
+        }elseif ($cliente['spc'] == 0){
+            $spc = 'Não.';
+        }elseif ($cliente['spc'] == 1){
+            $spc = 'Sim';
+        }else{
+            $spc = 'Não fornecedido.';
+        }
 
-        $carteira = ($cliente['emprego'] == 1) ? 'Sim, mais de 6 meses' :
-                    ($cliente['emprego'] == 2) ? 'Sim, menos de 6 meses' : "Não";
+        if ($cliente['emprego'] == 1){
+            $carteira = 'Sim, mais de 6 meses';
+        }elseif ($cliente['emprego'] == 2){
+            $carteira = 'Sim, menos de 6 meses';
+        }elseif ($cliente['emprego'] == 3){
+            $carteira = 'Não';
+        }else{
+            $carteira = 'Não fornecido.';
+        }
 
-        $renda = ($cliente['rendaComprovada'] == 1) ? 'Sim, contracheque' :
-                 ($cliente['rendaComprovada'] == 2) ? 'Sim, imposto de renda' :
-                 ($cliente['rendaComprovada'] == 3) ? 'Sim, extrato  bancário' : "Não";
+        if ($cliente['rendaComprovada'] == 1){
+            $renda = 'Sim, contracheque.';
+        }elseif ($cliente['rendaComprovada'] == 2){
+            $renda = 'Sim, imposto de renda';
+        }elseif ($cliente['rendaComprovada'] == 3){
+            $renda = 'Sim, extrato  bancário';
+        }elseif ($cliente['rendaComprovada'] == 4){
+            $renda = 'Não';
+        }else{
+            $renda = 'Não fornecido.';
+        }
 
-        $chequeDev = ($cliente['chequeDev'] == 0) ? 'Mas possuo alguns devolvidos nos últimos meses.' :
-                     ($cliente['chequeDev'] == 1) ? 'Mas não houve devolução de cheques' : "";
+        if ($cliente['chequeDev'] == 0){
+            $chequeDev = 'Mas não houve devolução de cheques';
+        }elseif ($cliente['chequeDev'] == 1){
+            $chequeDev = 'Mas possuo alguns devolvidos nos últimos meses.';
+        }else{
+            $chequeDev = '';
+        }
 
-        $cheque = ($cliente['cheque'] == 1) ? 'Sim.'.$chequeDev :
-                  ($cliente['cheque'] == 0) ? 'Não' : "";
+        if(is_null($cliente['cheque'])){
+            $cheque = "Não fornecido.";
+        }elseif ($cliente['cheque'] == 1){
+            $cheque = 'Sim.'.$chequeDev;
+        }elseif ($cliente['cheque'] == 0){
+            $cheque = 'Não';
+        }else{
+            $cheque = 'Não fornecedido.';
+        }
 
-        $tempoConta = ($cliente['bank_tempo_conta'] == 1) ? 'Mais de 1 ano.' :
-                      ($cliente['bank_tempo_conta'] == 2) ? 'Menos de 1 ano' : "";
+        if ($cliente['bank_tempo_conta'] == 1){
+            $tempoConta = 'Mais de 1 ano.';
+        }elseif ($cliente['bank_tempo_conta'] == 2){
+            $tempoConta = 'Menos de 1 ano';
+        }else{
+            $tempoConta = "Não fornecido.";
+        }
 
-        $banco = ($cliente['bank_possui'] == 1) ? 'Sim, conta corrente.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'] :
-                 ($cliente['bank_possui'] == 2) ? 'Sim, conta poupança.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'] : "Não.";
-
+        if ($cliente['bank_possui'] == 1){
+            $banco = 'Sim, conta corrente.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].'<br/>Conta.'.$cliente['bank_conta'];
+        }elseif ($cliente['bank_possui'] == 2){
+            $banco = 'Sim, conta poupança.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'];
+        }elseif ($cliente['bank_possui'] == 3){
+            $banco = 'Não';
+        }else{
+            $banco = "Não fornecido.";
+        }
 
         if (!empty($cliente['estadMuni'])) {
 
@@ -86,7 +134,7 @@ class SendEmail
                 $value = 'R$ '.number_format($cliente['estadMuni']['margem'], 2, ',', '.');
             }elseif ($cliente['estadMuni']['margemOption'] == 2){
                 $label = 'Matrícula + senha.';
-                $value = 'Matrícula: '.$cliente['estadMuni']['matricula'].'. Senha: '.$cliente['estadMuni']['password'];
+                $value = 'Matrícula: '.$cliente['estadMuni']['matricula'].'.<br/> Senha: '.$cliente['estadMuni']['password'];
             }elseif ($cliente['estadMuni']['margemOption'] == 3){
                 $label = 'Foto do contracheque';
                 $value = '<a href="'.$url.'/'.$cliente['estadMuni']['imageUrl'].'">Download</a>';
@@ -114,6 +162,7 @@ class SendEmail
                      </tr>';
             $credito = $credito.$aux;
         }
+        $credito = (empty($credito)) ? 'Não fornecido.' : $credito ;
 
         $parentesco = "";
         foreach ($cliente['parentesco'] as $key => $value){
@@ -225,10 +274,16 @@ class SendEmail
         $mail->IsHTML(true);
         $mail->Send();
 
+        if($mail){
+            $finalizeDAO = new FinalizeDAO();
+            $finalizeDAO->finalize($cliente['cli_id']);
+        }
+
         return array(
             'status'    => 200,
             'message'   => "SUCCESS",
-            'result'    => 'E-mails enviados com sucesso!'
+            'result'    => 'E-mails enviados com sucesso!',
+            'Mail'      => $mail
         );
     }
 }
