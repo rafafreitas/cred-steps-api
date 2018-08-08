@@ -18,7 +18,7 @@ class SendEmail
         $clienteDAO = new ClienteDAO();
         if ($all) { //
             $clientes = $clienteDAO->getClientes();
-            foreach ($clientes as $key => $value){
+            foreach ($clientes['result'] as $key => $value){
                 $this->sendNewEmail($value);
             }
             return array(
@@ -28,7 +28,7 @@ class SendEmail
             );
         }else{
             $cliente = $clienteDAO->getCliente($cli_id);
-            return $this->sendNewEmail($cliente);
+            return $this->sendNewEmail($cliente['result']);
         }
     }
 
@@ -36,70 +36,75 @@ class SendEmail
         $uteis = new Uteis();
         $url = 'https://api.rafafreitas.com.br/uploads/docs';
 
-        $dados = $cliente['result'][0];
+        $parcelas = 'R$ '.number_format($cliente['cli_emprestimo'], 2, ',', '.').
+                    ' em '.$cliente['cli_parcelas'].' Parcelas';
 
-        $parcelas = 'R$ '.number_format($dados['cli_emprestimo'], 2, ',', '.').
-                    ' em '.$dados['cli_parcelas'].' Parcelas';
-
-        if($dados['ocup_id'] == 5){
-            $ocupacao = $dados['ocup_nome'].'('.$dados['cli_estado'].')';
-        }elseif ($dados['ocup_id'] == 6){
-            $ocupacao = $dados['ocup_nome'].'('.$dados['Nome'].'-'.$dados['cli_estado'].')';
-        }elseif ($dados['ocup_id'] == 7){
-            $ocupacao = $dados['ocup_nome'].'('.$dados['cli_empresa'].')';
+        if($cliente['ocup_id'] == 5){
+            $ocupacao = $cliente['ocup_nome'].'('.$cliente['cli_estado'].')';
+        }elseif ($cliente['ocup_id'] == 6){
+            $ocupacao = $cliente['ocup_nome'].'('.$cliente['Nome'].'-'.$cliente['cli_estado'].')';
+        }elseif ($cliente['ocup_id'] == 7){
+            $ocupacao = $cliente['ocup_nome'].'('.$cliente['cli_empresa'].')';
         }else{
-            $ocupacao = $dados['ocup_nome'];
+            $ocupacao = $cliente['ocup_nome'];
         }
 
-        if($dados['motivo_id'] == 1 || $dados['motivo_id'] == 2){
-            $motivacao = $dados['motivo_nome'].'('.$dados['motivo_tratamento'].')';
-        }elseif ($dados['motivo_id'] == 5){
-            $motivacao = $dados['motivo_nome'].'('.$dados['dataFesta'].')';
+        if($cliente['motivo_id'] == 1 || $cliente['motivo_id'] == 2){
+            $motivacao = $cliente['motivo_nome'].'('.$cliente['motivo_tratamento'].')';
+        }elseif ($cliente['motivo_id'] == 5){
+            $motivacao = $cliente['motivo_nome'].'('.$cliente['dataFesta'].')';
         }else{
-            $motivacao = $dados['motivo_nome'];
+            $motivacao = $cliente['motivo_nome'];
         }
 
-        $spc = ($dados['spc'] == 0) ? 'Não' : 'Sim';
+        $spc = ($cliente['spc'] == 0) ? 'Não' : 'Sim';
 
-        $carteira = ($dados['emprego'] == 1) ? 'Sim, mais de 6 meses' :
-                    ($dados['emprego'] == 2) ? 'Sim, menos de 6 meses' : "Não";
+        $carteira = ($cliente['emprego'] == 1) ? 'Sim, mais de 6 meses' :
+                    ($cliente['emprego'] == 2) ? 'Sim, menos de 6 meses' : "Não";
 
-        $renda = ($dados['rendaComprovada'] == 1) ? 'Sim, contracheque' :
-                 ($dados['rendaComprovada'] == 2) ? 'Sim, imposto de renda' :
-                 ($dados['rendaComprovada'] == 3) ? 'Sim, extrato  bancário' : "Não";
+        $renda = ($cliente['rendaComprovada'] == 1) ? 'Sim, contracheque' :
+                 ($cliente['rendaComprovada'] == 2) ? 'Sim, imposto de renda' :
+                 ($cliente['rendaComprovada'] == 3) ? 'Sim, extrato  bancário' : "Não";
 
-        $chequeDev = ($dados['chequeDev'] == 0) ? 'Mas possuo alguns devolvidos nos últimos meses.' :
-                     ($dados['chequeDev'] == 1) ? 'Mas não houve devolução de cheques' : "";
+        $chequeDev = ($cliente['chequeDev'] == 0) ? 'Mas possuo alguns devolvidos nos últimos meses.' :
+                     ($cliente['chequeDev'] == 1) ? 'Mas não houve devolução de cheques' : "";
 
-        $cheque = ($dados['cheque'] == 1) ? 'Sim.'.$chequeDev :
-                  ($dados['cheque'] == 0) ? 'Não' : "";
+        $cheque = ($cliente['cheque'] == 1) ? 'Sim.'.$chequeDev :
+                  ($cliente['cheque'] == 0) ? 'Não' : "";
 
-        $tempoConta = ($dados['bank_tempo_conta'] == 1) ? 'Mais de 1 ano.' :
-                      ($dados['bank_tempo_conta'] == 2) ? 'Menos de 1 ano' : "";
+        $tempoConta = ($cliente['bank_tempo_conta'] == 1) ? 'Mais de 1 ano.' :
+                      ($cliente['bank_tempo_conta'] == 2) ? 'Menos de 1 ano' : "";
 
-        $banco = ($dados['bank_possui'] == 1) ? 'Sim, conta corrente.'.'('.$tempoConta.') '.$dados['banco'].'<br/> Ag.'.$dados['bank_agencia'].' Conta.'.$dados['bank_conta'] :
-                 ($dados['bank_possui'] == 2) ? 'Sim, conta poupança.'.'('.$tempoConta.') '.$dados['banco'].'<br/> Ag.'.$dados['bank_agencia'].' Conta.'.$dados['bank_conta'] : "Não.";
+        $banco = ($cliente['bank_possui'] == 1) ? 'Sim, conta corrente.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'] :
+                 ($cliente['bank_possui'] == 2) ? 'Sim, conta poupança.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'] : "Não.";
 
 
-        if (!empty($cliente['result']['estadMuni'])) {
-            $label = ($cliente['result']['estadMuni']['margemOption'] == 1) ? 'Valor da margem livre' :
-                     ($cliente['result']['estadMuni']['margemOption'] == 2) ? 'Matrícula + senha.' :
-                     ($cliente['result']['estadMuni']['margemOption'] == 3) ? 'Foto do contracheque' : '';
+        if (!empty($cliente['estadMuni'])) {
 
-            $value = ($cliente['result']['estadMuni']['margemOption'] == 1) ? $cliente['result']['estadMuni']['margem'] :
-                     ($cliente['result']['estadMuni']['margemOption'] == 2) ? 'Matrícula: '.$cliente['result']['estadMuni']['matricula'].'. Senha: '.$cliente['result']['estadMuni']['password'] :
-                     ($cliente['result']['estadMuni']['margemOption'] == 3) ? '<a href="'.$url.'/'.$cliente['result']['estadMuni']['imageUrl'].'">Download</a>' : '';
+            if($cliente['estadMuni']['margemOption'] == 1){
+                $label = 'Valor da margem livre';
+                $value = 'R$ '.number_format($cliente['estadMuni']['margem'], 2, ',', '.');
+            }elseif ($cliente['estadMuni']['margemOption'] == 2){
+                $label = 'Matrícula + senha.';
+                $value = 'Matrícula: '.$cliente['estadMuni']['matricula'].'. Senha: '.$cliente['estadMuni']['password'];
+            }elseif ($cliente['estadMuni']['margemOption'] == 3){
+                $label = 'Foto do contracheque';
+                $value = '<a href="'.$url.'/'.$cliente['estadMuni']['imageUrl'].'">Download</a>';
+            }else{
+                $label = '';
+                $value = '';
+            }
 
             $margem =  '<tr>
                             <th style="border: 1px solid #000;width: 60px;">'.$label.'</th>
                             <td style="border: 1px solid #000;">'.$value.'</td>
                         </tr>';
         }else{
-            $margem = '123';
+            $margem = '';
         }
 
         $credito = "";
-        foreach ($cliente['result']['credito'] as $key => $value){
+        foreach ($cliente['credito'] as $key => $value){
             $limite = "";
             if ($value['cred_id'] == 2){
                 $limite = '<br/>Limite R$ '.$value['limite_cartao'];
@@ -111,7 +116,7 @@ class SendEmail
         }
 
         $parentesco = "";
-        foreach ($cliente['result']['parentesco'] as $key => $value){
+        foreach ($cliente['parentesco'] as $key => $value){
 
             $proximidade = ($value['grau'] == 1) ? 'Pai' :
                            ($value['grau'] == 2) ? 'Mãe' :
@@ -119,13 +124,13 @@ class SendEmail
                            ($value['grau'] == 4) ? 'Outro'.$value['proximidade'] : '';
 
             if($value['ocupacao'] == 5){
-                $ocupacao = $value['ocup_nome'].'('.$value['estado'].')';
+                $ocupacaoP = $value['ocup_nome'].'('.$value['estado'].')';
             }elseif ($value['ocupacao'] == 6){
-                $ocupacao = $value['ocup_nome'].'('.$value['Nome'].'-'.$value['estado'].')';
-            }elseif ($dados['ocupacao'] == 7){
-                $ocupacao = $value['ocup_nome'].'('.$value['empresa'].')';
+                $ocupacaoP = $value['ocup_nome'].'('.$value['Nome'].'-'.$value['estado'].')';
+            }elseif ($value['ocupacao'] == 7){
+                $ocupacaoP = $value['ocup_nome'].'('.$value['empresa'].')';
             }else{
-                $ocupacao = $value['ocup_nome'];
+                $ocupacaoP = $value['ocup_nome'];
             }
 
             $grau =  '<p>'.($key+1).'º Indicação</p>
@@ -147,25 +152,37 @@ class SendEmail
                      </tr>
                      <tr>
                         <th style="border: 1px solid #000;width: 60px;">Ocupação</th>
-                        <td style="border: 1px solid #000;">'.$ocupacao.'</td>
+                        <td style="border: 1px solid #000;">'.$ocupacaoP.'</td>
                      </tr>
                      
                      ';
             $parentesco = $parentesco.$grau;
         }
-
         $parentesco = (empty($parentesco)) ? 'Não fornecido.' : $parentesco ;
 
+
+        $doc_rg =(!is_null($cliente['finalize']['rg'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['rg'].'">Download</a>' : 'Não forncecido.' ;
+        $doc_cpf =(!is_null($cliente['finalize']['cpf'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['cpf'].'">Download</a>' : 'Não forncecido.' ;
+        $doc_comp =(!is_null($cliente['finalize']['compResidencia'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['compResidencia'].'">Download</a>' : 'Não forncecido.' ;
+        $doc_cont =(!is_null($cliente['finalize']['contraCheque'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['contraCheque'].'">Download</a>' : 'Não forncecido.' ;
+        $doc_cart =(!is_null($cliente['finalize']['carteiraTrabalho'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['carteiraTrabalho'].'">Download</a>' : 'Não forncecido.' ;
+        $doc_imp =(!is_null($cliente['finalize']['impostoRenda'])) ?
+            '<a href="'.$url.'/'.$cliente['finalize']['impostoRenda'].'">Download</a>' : 'Não forncecido.' ;
 
         $body = file_get_contents('Basics/Template_Email.html');
         $body = str_replace('%url%', $url, $body);
 
         //  Dados Pessoais
-        $body = str_replace('%nome%', $dados['cli_nome'], $body);
-        $body = str_replace('%cpf%', $uteis->mask($dados['cli_cpf'],'###.###.###-##') , $body);
-        $body = str_replace('%telefone%', $dados['cli_telefone'], $body);
-        $body = str_replace('%nascimento%', $dados['cliNascimento'], $body);
-        $body = str_replace('%email%', $dados['cli_email'], $body);
+        $body = str_replace('%nome%', $cliente['cli_nome'], $body);
+        $body = str_replace('%cpf%', $uteis->mask($cliente['cli_cpf'],'###.###.###-##') , $body);
+        $body = str_replace('%telefone%', $cliente['cli_telefone'], $body);
+        $body = str_replace('%nascimento%', $cliente['cliNascimento'], $body);
+        $body = str_replace('%email%', $cliente['cli_email'], $body);
         $body = str_replace('%emprestimo%', $parcelas, $body);
         $body = str_replace('%ocupacao%', $ocupacao, $body);
         $body = str_replace('%motivacao%', $motivacao, $body);
@@ -184,8 +201,28 @@ class SendEmail
         // Dados Parentesco
         $body = str_replace('%parentesco%', $parentesco, $body);
 
+        // Dados Documentos
+        $body = str_replace('%docRg%', $doc_rg, $body);
+        $body = str_replace('%docCpf%', $doc_cpf, $body);
+        $body = str_replace('%docComp%', $doc_comp, $body);
+        $body = str_replace('%docContra%', $doc_cont, $body);
+        $body = str_replace('%docCarteira%', $doc_cart, $body);
+        $body = str_replace('%docImposto%', $doc_imp, $body);
 
-        
+        $mail = new PHPMailer(true);
+        $mail->CharSet = 'UTF-8';
+        $mail->IsSMTP();
+        $mail->Host = "mx1..com.br";
+        $mail->SMTPAuth = true;
+        $mail->Port = 587;
+        $mail->Username = '';
+        $mail->Password = '';
+        $mail->From = "";
+        $mail->FromName = "";
+        $mail->AddAddress('rafael.vasconcelos@outlook.com', 'Contato');
+        $mail->Subject  = "";
+        $mail->MsgHTML($body);
+        $mail->IsHTML(true);
         $mail->Send();
 
         return array(
