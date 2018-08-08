@@ -185,15 +185,15 @@ class ClienteDAO
             $resultFinalize = $stmt4->fetchAll(PDO::FETCH_ASSOC);
             $resultParentesco = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
-            $resultCliente['credito'] = $resultCredito;
-            $resultCliente['estadMuni'] = $resultEstMuni[0];
-            $resultCliente['finalize'] = $resultFinalize[0];
-            $resultCliente['parentesco'] = $resultParentesco;
+            $resultCliente[0]['credito'] = $resultCredito;
+            $resultCliente[0]['estadMuni'] = $resultEstMuni[0];
+            $resultCliente[0]['finalize'] = $resultFinalize[0];
+            $resultCliente[0]['parentesco'] = $resultParentesco;
 
             return array(
                 'status'    => 200,
                 'message'   => "INFO",
-                'result'    => $resultCliente
+                'result'    => $resultCliente[0]
             );
 
         } catch (PDOException $ex) {
@@ -266,7 +266,7 @@ class ClienteDAO
                        ON mo.motivo_id = mot.motivo_id
                        
                        WHERE cli.cli_status = 1 
-                       AND cli.cli_cadastro < date_sub(".$data.", interval 15 minute);";
+                       AND cli.cli_cadastro < date_sub('".$data."', interval 15 minute);";
         $stmt = $conn->prepare($sql);
 
         $sql2 = "SELECT cre.cred_id,
@@ -315,32 +315,33 @@ class ClienteDAO
 
         try {
 
-            $stmt->bindValue(1,$cli_id);
             $stmt->execute();
-
-            $stmt2->bindValue(1,$cli_id);
-            $stmt2->execute();
-
-            $stmt3->bindValue(1,$cli_id);
-            $stmt3->execute();
-
-            $stmt4->bindValue(1,$cli_id);
-            $stmt4->execute();
-
-            $stmt5->bindValue(1,$cli_id);
-            $stmt5->execute();
-
             $resultCliente = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $resultCredito = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-            $resultEstMuni = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-            $resultFinalize = $stmt4->fetchAll(PDO::FETCH_ASSOC);
-            $resultParentesco = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
+            foreach ($resultCliente as $key => $value) {
+                $stmt2->bindValue(1,$value['cli_id']);
+                $stmt2->execute();
 
-            $resultCliente['credito'] = $resultCredito;
-            $resultCliente['estadMuni'] = $resultEstMuni;
-            $resultCliente['finalize'] = $resultFinalize;
-            $resultCliente['parentesco'] = $resultParentesco;
+                $stmt3->bindValue(1,$value['cli_id']);
+                $stmt3->execute();
+
+                $stmt4->bindValue(1,$value['cli_id']);
+                $stmt4->execute();
+
+                $stmt5->bindValue(1,$value['cli_id']);
+                $stmt5->execute();
+
+                $resultCredito = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+                $resultEstMuni = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+                $resultFinalize = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+                $resultParentesco = $stmt5->fetchAll(PDO::FETCH_ASSOC);
+
+                $resultCliente[$key]['credito'] = $resultCredito;
+                $resultCliente[$key]['estadMuni'] = $resultEstMuni[0];
+                $resultCliente[$key]['finalize'] = $resultFinalize[0];
+                $resultCliente[$key]['parentesco'] = $resultParentesco;
+
+            }
 
             return array(
                 'status'    => 200,
