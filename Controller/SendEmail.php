@@ -39,6 +39,15 @@ class SendEmail
         $parcelas = 'R$ '.number_format($cliente['cli_emprestimo'], 2, ',', '.').
                     ' em '.$cliente['cli_parcelas'].' Parcelas';
 
+
+        if($cliente['cli_origem'] == 1){
+            $origem = '1° Formulário';
+        }elseif ($cliente['cli_origem'] == 2){
+            $origem = '2° Formulário';
+        }else{
+            $origem = $cliente['cli_origem'];
+        }
+
         if($cliente['ocup_id'] == 5){
             $ocupacao = $cliente['ocup_nome'].'('.$cliente['cli_estado'].')';
         }elseif ($cliente['ocup_id'] == 6){
@@ -235,6 +244,8 @@ class SendEmail
         $body = str_replace('%emprestimo%', $parcelas, $body);
         $body = str_replace('%ocupacao%', $ocupacao, $body);
         $body = str_replace('%motivacao%', $motivacao, $body);
+        $body = str_replace('%indicacao%', $cliente['cli_indicacao'], $body);
+        $body = str_replace('%origem%', $origem, $body);
 
         // Dados Financeiros
         $body = str_replace('%margem%', $margem, $body);
