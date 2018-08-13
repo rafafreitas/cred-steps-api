@@ -63,6 +63,7 @@ $app->group('', function (){
         $cliente->setNascimento($nascimento);
         $cliente->setStatus(1);
         $cliente->setTipoId(1);
+        $cliente->setOrigem($json["router"]);
 
         $ocupacao = new Ocupacao();
         $ocupacao->setOpcao($json["ocupacao"]["opcao"]);

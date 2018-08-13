@@ -19,6 +19,7 @@ class Cliente
     private $parcelas;
     private $status;
     private $cadastro;
+    private $origem;
     private $tipo_id;
 
     /**
@@ -195,6 +196,22 @@ class Cliente
     public function setCadastro($cadastro)
     {
         $this->cadastro = $cadastro;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrigem()
+    {
+        return $this->origem;
+    }
+
+    /**
+     * @param mixed $origem
+     */
+    public function setOrigem($origem)
+    {
+        $this->origem = $origem;
     }
 
     /**
