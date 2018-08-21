@@ -163,12 +163,12 @@ $app->group('', function (){
                 $arrayParentesco[$key]['nascimento'] = $nascimento;
             }
 
-            if (!empty($arrayParentesco[$key]['nascimento'])){
+            if (!empty($arrayParentesco[$key]['telefone'])){
                 $telefone = $uteisClass->removeMask($arrayParentesco[$key]['telefone'], 'telefone');
                 $arrayParentesco[$key]['telefone'] = $telefone;
             }
 
-            if (!empty($arrayParentesco[$key]['nascimento'])){
+            if (!empty($arrayParentesco[$key]['cpf'])){
                 $cpf = $uteisClass->removeMask($arrayParentesco[$key]['cpf'], 'cpf');
                 $arrayParentesco[$key]['cpf'] = $cpf;
             }

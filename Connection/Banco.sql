@@ -141,6 +141,7 @@ CREATE TABLE `enderecos` (
     `cli_email` LONGTEXT DEFAULT NULL,
     `cli_emprestimo` DOUBLE NOT NULL,
     `cli_parcelas` INT(11) NOT NULL,
+    `cli_valor_parcela` INT(11) NOT NULL,
     `cli_status` TINYINT(1) NOT NULL,
     `cli_cadastro` DATETIME NOT NULL,
     `tipo_id` INT(1) NOT NULL
@@ -205,8 +206,15 @@ CREATE TABLE `enderecos` (
     `bank_id` INT(11) DEFAULT NULL,
     `bank_tempo_conta` INT(1) DEFAULT NULL,
     `bank_agencia` LONGTEXT DEFAULT NULL,
-    `bank_conta` LONGTEXT DEFAULT NULL
+    `bank_conta` LONGTEXT DEFAULT NULL,
+    `bank_bb_possui` INT(1) DEFAULT NULL,
+    `bank_bb_agencia` LONGTEXT DEFAULT NULL,
+    `bank_bb_conta` LONGTEXT DEFAULT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_possui int(1) DEFAULT NULL;
+  ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_agencia LONGTEXT DEFAULT NULL;
+  ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_conta LONGTEXT DEFAULT NULL;
 
 -- --------------------------------------------------------
 
@@ -221,7 +229,7 @@ CREATE TABLE `enderecos` (
     `proximidade` LONGTEXT DEFAULT NULL,
     `nome` LONGTEXT DEFAULT NULL,
     `cpf` VARCHAR(11) DEFAULT NULL,
-    `telefone` VARCHAR(1) DEFAULT NULL,
+    `telefone` VARCHAR(11) DEFAULT NULL,
     `nascimento` DATE DEFAULT NULL,
     `ocupacao` INT(11) DEFAULT NULL,
     `estado` LONGTEXT DEFAULT NULL,
