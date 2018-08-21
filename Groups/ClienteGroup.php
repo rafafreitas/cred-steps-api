@@ -51,10 +51,12 @@ $app->group('', function (){
         $nascimento = $uteisClass->convertData($json["nascimento"], '/');
         $telefone = $uteisClass->removeMask($json["telefone"], 'telefone');
         $cpf = $uteisClass->removeMask($json["cpf"], 'cpf');
+        $valorParcela = $uteisClass->removeMask($json["parcelaValor"], 'money');
 
         $cliente = new Cliente();
         $cliente->setValorEmprestimo($json["money"]);
         $cliente->setParcelas($json["parcela"]);
+        $cliente->setValorParcela($valorParcela);
         $cliente->setNome($json["nome"]);
         $cliente->setIndicacao($json["indicacao"]);
         $cliente->setTelefone($telefone);

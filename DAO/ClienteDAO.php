@@ -342,7 +342,6 @@ class ClienteDAO
                 $resultCliente[$key]['estadMuni'] = $resultEstMuni[0];
                 $resultCliente[$key]['finalize'] = $resultFinalize[0];
                 $resultCliente[$key]['parentesco'] = $resultParentesco;
-
             }
 
             return array(
@@ -367,8 +366,8 @@ class ClienteDAO
         $conn = \Database::conexao();
 
         $sql = "INSERT INTO clientes (cli_nome, cli_cpf, cli_telefone, cli_nascimento, cli_email, 
-                                      cli_emprestimo, cli_parcelas, cli_status, cli_cadastro, tipo_id, cli_indicacao, cli_origem)
-                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                      cli_emprestimo, cli_parcelas, cli_status, cli_cadastro, tipo_id, cli_indicacao, cli_origem, cli_valor_parcela)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         $sql2 = "INSERT INTO cliente_ocupacao (cli_id, ocup_id, cli_estado, cli_cidade, cli_empresa)
@@ -390,6 +389,7 @@ class ClienteDAO
             $stmt->bindValue(10,$cliente->getTipoId());
             $stmt->bindValue(11,$cliente->getIndicacao());
             $stmt->bindValue(12,$cliente->getOrigem());
+            $stmt->bindValue(13,$cliente->getValorParcela());
             $stmt->execute();
 
             $last_id = $conn->lastInsertId();
@@ -434,7 +434,8 @@ class ClienteDAO
                      cli_parcelas = ?,
                      cli_cadastro = ?, 
                      cli_indicacao = ?, 
-                     cli_origem = ?
+                     cli_origem = ?,
+                     cli_valor_parcela = ? 
                 WHERE cli_id = ?";
         $stmt = $conn->prepare($sql);
 
@@ -458,7 +459,8 @@ class ClienteDAO
             $stmt->bindValue(8,$data);
             $stmt->bindValue(9,$cliente->getIndicacao());
             $stmt->bindValue(10,$cliente->getOrigem());
-            $stmt->bindValue(11,$cliente->getId());
+            $stmt->bindValue(11,$cliente->getValorParcela());
+            $stmt->bindValue(12,$cliente->getId());
             $stmt->execute();
 
             $stmt2->bindValue(1,$ocupacao->getOpcao());

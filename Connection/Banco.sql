@@ -141,11 +141,13 @@ CREATE TABLE `enderecos` (
     `cli_email` LONGTEXT DEFAULT NULL,
     `cli_emprestimo` DOUBLE NOT NULL,
     `cli_parcelas` INT(11) NOT NULL,
-    `cli_valor_parcela` INT(11) NOT NULL,
+    `cli_valor_parcela` DOUBLE NOT NULL,
     `cli_status` TINYINT(1) NOT NULL,
     `cli_cadastro` DATETIME NOT NULL,
     `tipo_id` INT(1) NOT NULL
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  ALTER TABLE clientes ADD COLUMN cli_valor_parcela  DOUBLE NOT NULL;
 
 -- --------------------------------------------------------
 

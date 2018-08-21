@@ -23,7 +23,11 @@ class ClienteController
             die;
         }
         if (empty($cliente->getParcelas())) {
-            return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe o valor das parcelas!');
+            return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe a quantidade de parcelas!');
+            die;
+        }
+        if (empty($cliente->getValorParcela())) {
+            return array('status' => 500, 'message' => "ERROR", 'result' => 'Informe o valor da parcela!');
             die;
         }
         if (empty($cliente->getNome())) {
