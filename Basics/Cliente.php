@@ -17,6 +17,7 @@ class Cliente
     private $email;
     private $valorEmprestimo;
     private $parcelas;
+    private $valorParcela;
     private $status;
     private $cadastro;
     private $origem;
@@ -164,6 +165,22 @@ class Cliente
     public function setParcelas($parcelas)
     {
         $this->parcelas = $parcelas;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorParcela()
+    {
+        return $this->valorParcela;
+    }
+
+    /**
+     * @param mixed $valorParcela
+     */
+    public function setValorParcela($valorParcela)
+    {
+        $this->valorParcela = $valorParcela;
     }
 
     /**
