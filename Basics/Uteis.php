@@ -64,7 +64,9 @@ class Uteis
     }
 
     function mask($val, $mask){
+
         $maskared = '';
+        if (empty($val)) return $maskared;
         $k = 0;
         for($i = 0; $i<=strlen($mask)-1; $i++) {
             if($mask[$i] == '#') {

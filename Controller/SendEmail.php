@@ -176,10 +176,17 @@ class SendEmail
         $parentesco = "";
         foreach ($cliente['parentesco'] as $key => $value){
 
-            $proximidade = ($value['grau'] == 1) ? 'Pai' :
-                           ($value['grau'] == 2) ? 'Mãe' :
-                           ($value['grau'] == 3) ? 'Conjuge' :
-                           ($value['grau'] == 4) ? 'Outro'.$value['proximidade'] : '';
+            if ($value['grau'] == 1){
+                $proximidade = 'Pai';
+            }elseif ($value['grau'] == 2){
+                $proximidade = 'Mãe';
+            }elseif ($value['grau'] == 3){
+                $proximidade = 'Conjuge';
+            }elseif ($value['grau'] == 4){
+                $proximidade = 'Outro'.$value['proximidade'];
+            }else{
+                $proximidade = '';
+            }
 
             if($value['ocupacao'] == 5){
                 $ocupacaoP = $value['ocup_nome'].'('.$value['estado'].')';
@@ -202,11 +209,11 @@ class SendEmail
                      </tr>
                      <tr>
                         <th style="border: 1px solid #000;width: 60px;">CPF</th>
-                        <td style="border: 1px solid #000;">'.$value['cpf'].'</td>
+                        <td style="border: 1px solid #000;">'.$uteis->mask($value['cpf'],'###.###.###-##').'</td>
                      </tr>
                      <tr>
                         <th style="border: 1px solid #000;width: 60px;">Telefone</th>
-                        <td style="border: 1px solid #000;">'.$value['telefone'].'</td>
+                        <td style="border: 1px solid #000;">'.$uteis->mask($value['telefone'],'(##) #####-####').'</td>
                      </tr>
                      <tr>
                         <th style="border: 1px solid #000;width: 60px;">Ocupação</th>
@@ -238,7 +245,7 @@ class SendEmail
         //  Dados Pessoais
         $body = str_replace('%nome%', $cliente['cli_nome'], $body);
         $body = str_replace('%cpf%', $uteis->mask($cliente['cli_cpf'],'###.###.###-##') , $body);
-        $body = str_replace('%telefone%', $cliente['cli_telefone'], $body);
+        $body = str_replace('%telefone%', $uteis->mask($cliente['cli_telefone'],'(##) #####-####'), $body);
         $body = str_replace('%nascimento%', $cliente['cliNascimento'], $body);
         $body = str_replace('%email%', $cliente['cli_email'], $body);
         $body = str_replace('%emprestimo%', $parcelas, $body);
