@@ -128,13 +128,19 @@ class SendEmail
         }
 
         if ($cliente['bank_possui'] == 1){
-            $banco = 'Sim, conta corrente.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].'<br/>Conta.'.$cliente['bank_conta'];
+            $banco = 'Sim, conta corrente.'.'('.$tempoConta.')<br/>'.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].'<br/>Conta.'.$cliente['bank_conta'];
         }elseif ($cliente['bank_possui'] == 2){
             $banco = 'Sim, conta poupança.'.'('.$tempoConta.') '.$cliente['banco'].'<br/> Ag.'.$cliente['bank_agencia'].' Conta.'.$cliente['bank_conta'];
         }elseif ($cliente['bank_possui'] == 3){
             $banco = 'Não';
         }else{
             $banco = "Não fornecido.";
+        }
+
+        if ($cliente['bank_bb_possui'] == 1){
+            $bancoBB = 'Sim.<br/>Agência: '.$cliente['bank_bb_agencia'].'<br/>Conta: '.$cliente['bank_bb_conta'];
+        }else{
+            $bancoBB = "Não possui.";
         }
 
         if (!empty($cliente['estadMuni'])) {
@@ -262,6 +268,7 @@ class SendEmail
         $body = str_replace('%carteira%', $carteira, $body);
         $body = str_replace('%renda%', $renda, $body);
         $body = str_replace('%cheque%', $cheque, $body);
+        $body = str_replace('%bancoBB%', $bancoBB, $body);
         $body = str_replace('%banco%', $banco, $body);
 
         // Dados Crédito

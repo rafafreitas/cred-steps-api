@@ -93,7 +93,11 @@ class ClienteDAO
                        ban.banco,
                        fi.bank_tempo_conta,
                        fi.bank_agencia,
-                       fi.bank_conta
+                       fi.bank_conta,
+
+                       fi.bank_bb_possui,
+                       fi.bank_bb_agencia,
+                       fi.bank_bb_conta
                        
                        FROM clientes cli
                        LEFT JOIN cliente_ocupacao occl
