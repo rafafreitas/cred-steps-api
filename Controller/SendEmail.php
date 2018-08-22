@@ -17,7 +17,7 @@ class SendEmail
     public function prepareEmail($all, $cli_id){
         $clienteDAO = new ClienteDAO();
         if ($all) { //
-            $clientes = $clienteDAO->getClientes();
+            $clientes = $clienteDAO->getClientes(null, false);
             foreach ($clientes['result'] as $key => $value){
                 $this->sendNewEmail($value);
             }
@@ -27,7 +27,7 @@ class SendEmail
                 'result'    => 'E-mails enviados com sucesso!'
             );
         }else{
-            $cliente = $clienteDAO->getCliente($cli_id);
+            $cliente = $clienteDAO->getClientes($cli_id, true);
             return $this->sendNewEmail($cliente['result']);
         }
     }
@@ -39,6 +39,7 @@ class SendEmail
         $parcelas = 'R$ '.number_format($cliente['cli_emprestimo'], 2, ',', '.').
                     ' em '.$cliente['cli_parcelas'].' Parcelas';
 
+        $valorParcelas = 'R$ '.number_format($cliente['cli_valor_parcela'], 2, ',', '.');
 
         if($cliente['cli_origem'] == 1){
             $origem = '1° Formulário';
@@ -249,6 +250,7 @@ class SendEmail
         $body = str_replace('%nascimento%', $cliente['cliNascimento'], $body);
         $body = str_replace('%email%', $cliente['cli_email'], $body);
         $body = str_replace('%emprestimo%', $parcelas, $body);
+        $body = str_replace('%valorParcela%', $valorParcelas, $body);
         $body = str_replace('%ocupacao%', $ocupacao, $body);
         $body = str_replace('%motivacao%', $motivacao, $body);
         $body = str_replace('%indicacao%', $cliente['cli_indicacao'], $body);
