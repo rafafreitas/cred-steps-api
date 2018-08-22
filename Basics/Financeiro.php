@@ -15,11 +15,15 @@ class Financeiro
     private $chequeDev;
     private $emprego;
     private $rendaComprovada;
+    private $rendaValor;
     private $bank_possui;
     private $bank_id;
     private $bank_tempo_conta;
     private $bank_agencia;
     private $bank_conta;
+    private $bank_bb_possui;
+    private $bank_bb_agencia;
+    private $bank_bb_conta;
 
     /**
      * @return mixed
@@ -136,6 +140,22 @@ class Financeiro
     /**
      * @return mixed
      */
+    public function getRendaValor()
+    {
+        return $this->rendaValor;
+    }
+
+    /**
+     * @param mixed $rendaValor
+     */
+    public function setRendaValor($rendaValor)
+    {
+        $this->rendaValor = $rendaValor;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getBankPossui()
     {
         return $this->bank_possui;
@@ -211,5 +231,53 @@ class Financeiro
     public function setBankConta($bank_conta)
     {
         $this->bank_conta = $bank_conta;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBankBbPossui()
+    {
+        return $this->bank_bb_possui;
+    }
+
+    /**
+     * @param mixed $bank_bb_possui
+     */
+    public function setBankBbPossui($bank_bb_possui)
+    {
+        $this->bank_bb_possui = $bank_bb_possui;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBankBbAgencia()
+    {
+        return $this->bank_bb_agencia;
+    }
+
+    /**
+     * @param mixed $bank_bb_agencia
+     */
+    public function setBankBbAgencia($bank_bb_agencia)
+    {
+        $this->bank_bb_agencia = $bank_bb_agencia;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBankBbConta()
+    {
+        return $this->bank_bb_conta;
+    }
+
+    /**
+     * @param mixed $bank_bb_conta
+     */
+    public function setBankBbConta($bank_bb_conta)
+    {
+        $this->bank_bb_conta = $bank_bb_conta;
     }
 }
