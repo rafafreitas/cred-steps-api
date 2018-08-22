@@ -60,7 +60,7 @@ class AdicionaisDAO
         $sql = "INSERT INTO cliente_financeiro (cli_id, spc, cheque, chequeDev, emprego, rendaComprovada, rendaValor,
                             bank_possui, bank_id, bank_tempo_conta, bank_agencia, bank_conta, bank_bb_possui, 
                             bank_bb_agencia, bank_bb_conta)
-                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         $sql2 = "INSERT INTO cliente_parentesco (cli_id, grau, proximidade, nome, 
