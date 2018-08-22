@@ -115,13 +115,13 @@ class ClienteDAO
                        ON mo.motivo_id = mot.motivo_id
                        
                        LEFT JOIN bancos ban
-                       ON fi.bank_id = ban.banco_id ";
+                       ON fi.bank_id = ban.cod ";
 
         if ($flag) {
             $sql .= 'WHERE cli.cli_id = ?';
         }else{
             $sql .= "WHERE cli.cli_status = 1
-                     AND cli.cli_cadastro < date_sub(\'".$data."\', interval 15 minute)";
+                     AND cli.cli_cadastro < date_sub('".$data."', interval 15 minute)";
         }
                        
         $stmt = $conn->prepare($sql);
