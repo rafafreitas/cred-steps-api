@@ -42,6 +42,15 @@ class AdicionaisController
 
         if ($financeiro->getBankId() == "") {
             $financeiro->setBankId(null);
+            $financeiro->setBankTempoConta(null);
+            $financeiro->setBankAgencia(null);
+            $financeiro->setBankConta(null);
+        }
+
+        if ($financeiro->getBankBbPossui() == "2") {
+            $financeiro->setBankBbPossui(null);
+            $financeiro->setBankBbConta(null);
+            $financeiro->setBankBbAgencia(null);
         }
 
         $adicionaisDAO = new AdicionaisDAO();

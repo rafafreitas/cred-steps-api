@@ -204,6 +204,7 @@ CREATE TABLE `enderecos` (
     `chequeDev` TINYINT(1) DEFAULT NULL,
     `emprego` INT(1) NOT NULL,
     `rendaComprovada` INT(1) NOT NULL,
+    `rendaValor` DOUBLE DEFAULT NULL,
     `bank_possui` INT(1) NOT NULL,
     `bank_id` INT(11) DEFAULT NULL,
     `bank_tempo_conta` INT(1) DEFAULT NULL,
@@ -217,6 +218,7 @@ CREATE TABLE `enderecos` (
   ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_possui int(1) DEFAULT NULL;
   ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_agencia LONGTEXT DEFAULT NULL;
   ALTER TABLE cliente_financeiro ADD COLUMN bank_bb_conta LONGTEXT DEFAULT NULL;
+  ALTER TABLE cliente_financeiro ADD COLUMN rendaValor DOUBLE DEFAULT NULL;
 
 -- --------------------------------------------------------
 

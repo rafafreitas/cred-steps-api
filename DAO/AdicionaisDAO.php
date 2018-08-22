@@ -57,9 +57,10 @@ class AdicionaisDAO
     public function insert(EstadualMunicipal $estadualMunicipal, Financeiro $financeiro, $parentesco, $flag){
         $conn = \Database::conexao();
 
-        $sql = "INSERT INTO cliente_financeiro (cli_id, spc, cheque, chequeDev, emprego, rendaComprovada, 
-                            bank_possui, bank_id, bank_tempo_conta, bank_agencia, bank_conta)
-                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO cliente_financeiro (cli_id, spc, cheque, chequeDev, emprego, rendaComprovada, rendaValor,
+                            bank_possui, bank_id, bank_tempo_conta, bank_agencia, bank_conta, bank_bb_possui, 
+                            bank_bb_agencia, bank_bb_conta)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         $sql2 = "INSERT INTO cliente_parentesco (cli_id, grau, proximidade, nome, 
@@ -79,11 +80,15 @@ class AdicionaisDAO
             $stmt->bindValue(4,$financeiro->getChequeDev());
             $stmt->bindValue(5,$financeiro->getEmprego());
             $stmt->bindValue(6,$financeiro->getRendaComprovada());
-            $stmt->bindValue(7,$financeiro->getBankPossui());
-            $stmt->bindValue(8,$financeiro->getBankId());
-            $stmt->bindValue(9,$financeiro->getBankTempoConta());
-            $stmt->bindValue(10,$financeiro->getBankAgencia());
-            $stmt->bindValue(11,$financeiro->getBankConta());
+            $stmt->bindValue(7,$financeiro->getRendaValor());
+            $stmt->bindValue(8,$financeiro->getBankPossui());
+            $stmt->bindValue(9,$financeiro->getBankId());
+            $stmt->bindValue(10,$financeiro->getBankTempoConta());
+            $stmt->bindValue(11,$financeiro->getBankAgencia());
+            $stmt->bindValue(12,$financeiro->getBankConta());
+            $stmt->bindValue(13,$financeiro->getBankBbPossui());
+            $stmt->bindValue(14,$financeiro->getBankBbAgencia());
+            $stmt->bindValue(15,$financeiro->getBankBbConta());
             $stmt->execute();
 
             foreach ($parentesco as $key => $value) {
@@ -142,11 +147,15 @@ class AdicionaisDAO
                      chequeDev = ?,
                      emprego = ?,
                      rendaComprovada = ?,
+                     rendaValor = ?,
                      bank_possui = ?,
                      bank_id = ?,
                      bank_tempo_conta = ?,
                      bank_agencia = ?,
-                     bank_conta = ?
+                     bank_conta = ?,
+                     bank_bb_possui = ?,
+                     bank_bb_agencia = ?,
+                     bank_bb_conta = ?
                 WHERE cli_id = ?";
         $stmt = $conn->prepare($sql);
 
@@ -173,12 +182,16 @@ class AdicionaisDAO
             $stmt->bindValue(3,$financeiro->getChequeDev());
             $stmt->bindValue(4,$financeiro->getEmprego());
             $stmt->bindValue(5,$financeiro->getRendaComprovada());
-            $stmt->bindValue(6,$financeiro->getBankPossui());
-            $stmt->bindValue(7,$financeiro->getBankId());
-            $stmt->bindValue(8,$financeiro->getBankTempoConta());
-            $stmt->bindValue(9,$financeiro->getBankAgencia());
-            $stmt->bindValue(10,$financeiro->getBankConta());
-            $stmt->bindValue(11,$financeiro->getCliId());
+            $stmt->bindValue(6,$financeiro->getRendaValor());
+            $stmt->bindValue(7,$financeiro->getBankPossui());
+            $stmt->bindValue(8,$financeiro->getBankId());
+            $stmt->bindValue(9,$financeiro->getBankTempoConta());
+            $stmt->bindValue(10,$financeiro->getBankAgencia());
+            $stmt->bindValue(11,$financeiro->getBankConta());
+            $stmt->bindValue(12,$financeiro->getBankBbPossui());
+            $stmt->bindValue(13,$financeiro->getBankBbAgencia());
+            $stmt->bindValue(14,$financeiro->getBankBbConta());
+            $stmt->bindValue(15,$financeiro->getCliId());
             $stmt->execute();
 
             $stmt2->bindValue(1,$financeiro->getCliId());

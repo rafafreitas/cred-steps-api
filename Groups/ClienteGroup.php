@@ -142,11 +142,16 @@ $app->group('', function (){
         $financeiro->setChequeDev($json['geral']['financeiras']["chequeDev"]);
         $financeiro->setEmprego($json['geral']['financeiras']["emprego"]);
         $financeiro->setRendaComprovada($json['geral']['financeiras']["rendaComprovada"]);
+        $financeiro->setRendaValor($uteisClass->removeMask($json['geral']['financeiras']["rendaValor"], 'money'));
         $financeiro->setBankPossui($json['geral']['financeiras']["banck"]["possui"]);
         $financeiro->setBankId($json['geral']['financeiras']["banck"]["banco"]);
         $financeiro->setBankTempoConta($json['geral']['financeiras']["banck"]["tempoConta"]);
         $financeiro->setBankAgencia($json['geral']['financeiras']["banck"]["agencia"]);
         $financeiro->setBankConta($json['geral']['financeiras']["banck"]["conta"]);
+
+        $financeiro->setBankBbPossui($json['geral']['financeiras']["banckBrasil"]["possui"]);
+        $financeiro->setBankBbAgencia($json['geral']['financeiras']["banckBrasil"]["agencia"]);
+        $financeiro->setBankBbConta($json['geral']['financeiras']["banckBrasil"]["conta"]);
 
         $arrayParentesco = $json['geral']['parentescos'];
         foreach ($arrayParentesco as $key => $value) {
