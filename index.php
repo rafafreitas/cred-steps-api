@@ -9,6 +9,7 @@
 require 'Header/index.php';
 
 require 'Groups/ClienteGroup.php';
+require 'Groups/SolicitacaoGroup.php';
 require 'Groups/BancosGroup.php';
 require 'Groups/EnderecosGroup.php';
 require 'Groups/EmailGroup.php';
