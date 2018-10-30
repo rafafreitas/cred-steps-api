@@ -6,6 +6,7 @@
  * Time: 14:42
  */
 require_once 'Connection/Conexao.php';
+require_once 'Basics/Uteis.php';
 class SolicitacaoDAO
 {
     public function getSolicitacoes(){
@@ -151,10 +152,37 @@ class SolicitacaoDAO
 
             }
 
+            $origem = array(
+                'form1' => array(),
+                'form2' => array(),
+                'app' => array()
+            );
+
+            $uteis = new Uteis();
+
+            foreach ($resultCliente as $key => $value){
+                // Set Masks
+                $value['cli_cpf'] = $uteis->mask($value['cli_cpf'],'###.###.###-##');
+                $value['cli_telefone'] = $uteis->mask($value['cli_telefone'],'(##) #####-####');
+
+
+                switch ($value['cli_origem']) {
+                    case 1:
+                        array_push($origem['form1'], $value);
+                      break;
+                    case 2:
+                        array_push($origem['form2'], $value);
+                        break;
+                    case 3:
+                        array_push($origem['app'], $value);
+                        break;
+                  }
+            }
+
             return array(
                 'status'    => 200,
                 'message'   => "INFO",
-                'result'    => $resultCliente
+                'result'    => $origem
             );
 
         } catch (PDOException $ex) {
