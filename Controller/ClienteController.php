@@ -11,11 +11,6 @@ require_once 'Basics/Ocupacao.php';
 require_once 'DAO/ClienteDAO.php';
 class ClienteController
 {
-    public function getUsers(){
-        $userDAO = new ClienteDAO();
-        return $userDAO->getUsers();
-    }
-
     public function insert(Cliente $cliente, Ocupacao $ocupacao){
 
         if (empty($cliente->getValorEmprestimo())) {

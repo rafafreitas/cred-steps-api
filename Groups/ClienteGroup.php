@@ -23,24 +23,6 @@ require_once 'Controller/MotivoController.php';
 
 $app->group('', function (){
 
-    //List-All
-    $this->get('/clientes', function ($request, $response, $args) {
-
-        $auth = new Authorization();
-        $check = $auth->verificarToken($request);
-
-        if ($check['status'] != 200) {
-            return $response->withJson($check, $check['status']);
-            die;
-        }
-
-        $clienteController = new ClienteController();
-        $retorno = $clienteController->getUsers();
-
-        return $response->withJson($retorno, $retorno['status']);
-
-    });
-
     $this->post('/cliente', function ($request, $response, $args) {
 
         $json = $request->getParsedBody();
